@@ -61,8 +61,8 @@ export default function AdminDashboard() {
 
     // Login form state
     const [loginForm, setLoginForm] = useState<LoginCredentials>({
-        email: "admin@example.com",
-        password: "admin123"
+        email: "",
+        password: ""
     })
 
     // Check for existing token on mount
