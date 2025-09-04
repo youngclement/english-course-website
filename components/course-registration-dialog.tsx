@@ -25,6 +25,13 @@ interface CourseRegistrationDialogProps {
     className?: string
 }
 
+interface FormErrors {
+    full_name?: string
+    phone?: string
+    email?: string
+    notes?: string
+}
+
 export default function CourseRegistrationDialog({
     trigger,
     courseName = "Khóa học Tâm Lý Học Hành Vi & Xã Hội",
@@ -36,6 +43,8 @@ export default function CourseRegistrationDialog({
     const { toast } = useToast()
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [errors, setErrors] = useState<FormErrors>({})
+    const [hasSubmitted, setHasSubmitted] = useState(false)
     const [formData, setFormData] = useState({
         full_name: "",
         phone: "",
@@ -43,6 +52,49 @@ export default function CourseRegistrationDialog({
         course_name: courseName,
         notes: "",
     })
+
+    // Validation functions
+    const validateFullName = (name: string): string | undefined => {
+        if (!name.trim()) return "Họ và tên là bắt buộc"
+        if (name.trim().length < 2) return "Họ và tên phải có ít nhất 2 ký tự"
+        if (name.trim().length > 50) return "Họ và tên không được quá 50 ký tự"
+        if (!/^[a-zA-ZÀ-ỹ\s]+$/.test(name.trim())) return "Họ và tên chỉ được chứa chữ cái và khoảng trắng"
+        return undefined
+    }
+
+    const validatePhone = (phone: string): string | undefined => {
+        if (!phone.trim()) return "Số điện thoại là bắt buộc"
+        const phoneRegex = /^(0|\+84)[0-9]{8,10}$/
+        if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+            return "Số điện thoại không hợp lệ (VD:  [redacted-phone]hoặc +84901234567)"
+        }
+        return undefined
+    }
+
+    const validateEmail = (email: string): string | undefined => {
+        if (!email.trim()) return "Email là bắt buộc"
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(email)) return "Email không hợp lệ"
+        if (email.length > 100) return "Email không được quá 100 ký tự"
+        return undefined
+    }
+
+    const validateNotes = (notes: string): string | undefined => {
+        if (notes.length > 500) return "Ghi chú không được quá 500 ký tự"
+        return undefined
+    }
+
+    const validateForm = (): boolean => {
+        const newErrors: FormErrors = {}
+        
+        newErrors.full_name = validateFullName(formData.full_name)
+        newErrors.phone = validatePhone(formData.phone)
+        newErrors.email = validateEmail(formData.email)
+        newErrors.notes = validateNotes(formData.notes)
+
+        setErrors(newErrors)
+        return !Object.values(newErrors).some(error => error !== undefined)
+    }
 
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -52,15 +104,62 @@ export default function CourseRegistrationDialog({
             ...prev,
             [name]: value,
         }))
+
+        // Only validate if form has been submitted before
+        if (hasSubmitted) {
+            let fieldError: string | undefined
+            switch (name) {
+                case 'full_name':
+                    fieldError = validateFullName(value)
+                    break
+                case 'phone':
+                    fieldError = validatePhone(value)
+                    break
+                case 'email':
+                    fieldError = validateEmail(value)
+                    break
+                case 'notes':
+                    fieldError = validateNotes(value)
+                    break
+            }
+
+            setErrors(prev => ({
+                ...prev,
+                [name]: fieldError
+            }))
+        }
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        
+        // Mark that form has been submitted
+        setHasSubmitted(true)
+        
+        // Validate form before submission
+        if (!validateForm()) {
+            toast({
+                title: "Vui lòng kiểm tra lại thông tin",
+                description: "Có một số trường chưa hợp lệ, vui lòng sửa và thử lại.",
+                variant: "destructive",
+            })
+            return
+        }
+
         setIsLoading(true)
 
         try {
+            // Clean phone number
+            const cleanedData = {
+                ...formData,
+                phone: formData.phone.replace(/\s/g, ''),
+                full_name: formData.full_name.trim(),
+                email: formData.email.trim(),
+                notes: formData.notes.trim(),
+            }
+
             // Gọi API đăng ký khóa học
-            const result = await courseAPI.register(formData)
+            const result = await courseAPI.register(cleanedData)
 
             if (result.success) {
                 // Reset form
@@ -71,7 +170,8 @@ export default function CourseRegistrationDialog({
                     course_name: courseName,
                     notes: "",
                 })
-
+                setErrors({})
+                setHasSubmitted(false)
                 setIsDialogOpen(false)
 
                 // Hiển thị toast thành công
@@ -88,7 +188,6 @@ export default function CourseRegistrationDialog({
                         </div>
                     ),
                     action: <CheckCircle className="h-5 w-5 text-green-500" />,
-                    variant: "success",
                 })
             } else {
                 // API trả về lỗi
@@ -148,7 +247,14 @@ export default function CourseRegistrationDialog({
                                 onChange={handleInputChange}
                                 required
                                 placeholder="Nhập họ và tên"
+                                className={errors.full_name ? "border-red-500 focus:ring-red-500" : ""}
                             />
+                            {hasSubmitted && errors.full_name && (
+                                <p className="text-sm text-red-600 flex items-center gap-1">
+                                    <AlertCircle className="h-4 w-4" />
+                                    {errors.full_name}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="phone">Số điện thoại *</Label>
@@ -158,8 +264,15 @@ export default function CourseRegistrationDialog({
                                 value={formData.phone}
                                 onChange={handleInputChange}
                                 required
-                                placeholder="Nhập số điện thoại"
+                                placeholder="0901234567"
+                                className={errors.phone ? "border-red-500 focus:ring-red-500" : ""}
                             />
+                            {hasSubmitted && errors.phone && (
+                                <p className="text-sm text-red-600 flex items-center gap-1">
+                                    <AlertCircle className="h-4 w-4" />
+                                    {errors.phone}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -172,8 +285,15 @@ export default function CourseRegistrationDialog({
                             value={formData.email}
                             onChange={handleInputChange}
                             required
-                            placeholder="Nhập email"
+                            placeholder="example@email.com"
+                            className={errors.email ? "border-red-500 focus:ring-red-500" : ""}
                         />
+                        {hasSubmitted && errors.email && (
+                            <p className="text-sm text-red-600 flex items-center gap-1">
+                                <AlertCircle className="h-4 w-4" />
+                                {errors.email}
+                            </p>
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -182,48 +302,60 @@ export default function CourseRegistrationDialog({
                             id="course_name"
                             name="course_name"
                             value={formData.course_name}
-                            onChange={handleInputChange}
-                            
                             disabled
+                            className="bg-gray-50"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="notes">Ghi chú</Label>
+                        <Label htmlFor="notes">Ghi chú (tùy chọn)</Label>
                         <Textarea
                             id="notes"
                             name="notes"
                             value={formData.notes}
                             onChange={handleInputChange}
-                            placeholder="Ghi chú thêm (nếu có)"
+                            placeholder="Bạn có câu hỏi gì hoặc muốn chia sẻ thêm về nhu cầu học tập?"
                             rows={3}
+                            className={errors.notes ? "border-red-500 focus:ring-red-500" : ""}
+                            maxLength={500}
                         />
+                        <div className="flex justify-between items-center">
+                            <div>
+                                {hasSubmitted && errors.notes && (
+                                    <p className="text-sm text-red-600 flex items-center gap-1">
+                                        <AlertCircle className="h-4 w-4" />
+                                        {errors.notes}
+                                    </p>
+                                )}
+                            </div>
+                            <p className="text-xs text-gray-500">
+                                {formData.notes.length}/500 ký tự
+                            </p>
+                        </div>
                     </div>
 
-                    <div className="flex gap-3 pt-4">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => setIsDialogOpen(false)}
-                            className="flex-1"
-                        >
-                            Hủy
-                        </Button>
-                        <Button
-                            type="submit"
-                            disabled={isLoading}
-                            className="flex-1"
-                        >
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Đang xử lý...
-                                </>
-                            ) : (
-                                "Đăng ký"
-                            )}
-                        </Button>
-                    </div>
+                    <Button
+                        type="submit"
+                        disabled={isLoading || Object.values(errors).some(error => error !== undefined)}
+                        className="w-full"
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Đang xử lý...
+                            </>
+                        ) : (
+                            "Đăng Ký Ngay"
+                        )}
+                    </Button>
+
+                    <p className="text-xs text-gray-500 text-center">
+                        Bằng việc đăng ký, bạn đồng ý với{" "}
+                        <a href="#" className="text-primary hover:underline">
+                            Điều khoản sử dụng
+                        </a>{" "}
+                        của chúng tôi.
+                    </p>
                 </form>
             </DialogContent>
         </Dialog>

@@ -17,6 +17,13 @@ interface MemberRegistrationProps {
     className?: string
 }
 
+interface FormErrors {
+    full_name?: string
+    email?: string
+    phone?: string
+    notes?: string
+}
+
 export default function MemberRegistration({
     triggerText = "Đăng Ký Thành Viên",
     triggerVariant = "default",
@@ -32,6 +39,57 @@ export default function MemberRegistration({
         phone: "",
         notes: ""
     })
+    const [errors, setErrors] = useState<FormErrors>({})
+    const [hasSubmitted, setHasSubmitted] = useState(false)
+
+    // Validation functions
+    const validateFullName = (name: string): string | undefined => {
+        if (!name.trim()) {
+            return "Họ và tên là bắt buộc"
+        }
+        if (name.trim().length < 2) {
+            return "Họ và tên phải có ít nhất 2 ký tự"
+        }
+        if (name.trim().length > 50) {
+            return "Họ và tên không được quá 50 ký tự"
+        }
+        // Check for valid Vietnamese name pattern
+        const nameRegex = /^[a-zA-ZàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđĐ\s]+$/
+        if (!nameRegex.test(name.trim())) {
+            return "Họ và tên chỉ được chứa chữ cái và khoảng trắng"
+        }
+        return undefined
+    }
+
+    const validatePhone = (phone: string): string | undefined => {
+        if (!phone.trim()) {
+            return "Số điện thoại là bắt buộc"
+        }
+        // Vietnamese phone number pattern
+        const phoneRegex = /^(0|\+84)[3-9]\d{8}$/
+        if (!phoneRegex.test(phone.trim())) {
+            return "Số điện thoại không hợp lệ (VD: 0901234567)"
+        }
+        return undefined
+    }
+
+    const validateEmail = (email: string): string | undefined => {
+        if (!email.trim()) {
+            return "Email là bắt buộc"
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(email.trim())) {
+            return "Địa chỉ email không hợp lệ"
+        }
+        return undefined
+    }
+
+    const validateNotes = (notes: string): string | undefined => {
+        if (notes.trim().length > 500) {
+            return "Ghi chú không được quá 500 ký tự"
+        }
+        return undefined
+    }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
@@ -39,10 +97,66 @@ export default function MemberRegistration({
             ...prev,
             [name]: value
         }))
+
+        // Only validate if form has been submitted before
+        if (hasSubmitted) {
+            let error: string | undefined
+            switch (name) {
+                case 'full_name':
+                    error = validateFullName(value)
+                    break
+                case 'phone':
+                    error = validatePhone(value)
+                    break
+                case 'email':
+                    error = validateEmail(value)
+                    break
+                case 'notes':
+                    error = validateNotes(value)
+                    break
+            }
+
+            setErrors(prev => ({
+                ...prev,
+                [name]: error
+            }))
+        }
+    }
+
+    const validateForm = (): boolean => {
+        const newErrors: FormErrors = {
+            full_name: validateFullName(formData.full_name),
+            phone: validatePhone(formData.phone),
+            email: validateEmail(formData.email),
+            notes: validateNotes(formData.notes)
+        }
+
+        setErrors(newErrors)
+        return !Object.values(newErrors).some(error => error !== undefined)
+    }
+
+    const isFormValid = () => {
+        return formData.full_name.trim() !== "" &&
+               formData.email.trim() !== "" &&
+               formData.phone.trim() !== "" &&
+               !Object.values(errors).some(error => error !== undefined)
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        
+        // Mark that form has been submitted
+        setHasSubmitted(true)
+        
+        if (!validateForm()) {
+            toast({
+                title: "Lỗi nhập liệu",
+                description: "Vui lòng kiểm tra và sửa các lỗi trong form",
+                variant: "destructive",
+            })
+            return
+        }
+
         setIsLoading(true)
 
         try {
@@ -61,6 +175,8 @@ export default function MemberRegistration({
                     phone: "",
                     notes: ""
                 })
+                setErrors({})
+                setHasSubmitted(false)
             } else {
                 throw new Error(result.message || 'Có lỗi xảy ra')
             }
@@ -102,7 +218,17 @@ export default function MemberRegistration({
                                 onChange={handleInputChange}
                                 required
                                 placeholder="Nhập họ và tên"
+                                className={errors.full_name ? "border-red-500 focus:border-red-500" : ""}
                             />
+                            {hasSubmitted && errors.full_name && (
+                                <p className="text-sm text-red-500 flex items-center gap-1">
+                                    <AlertCircle className="h-4 w-4" />
+                                    {errors.full_name}
+                                </p>
+                            )}
+                            <p className="text-xs text-gray-500">
+                                {formData.full_name.length}/50 ký tự
+                            </p>
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="phone">Số điện thoại *</Label>
@@ -112,8 +238,15 @@ export default function MemberRegistration({
                                 value={formData.phone}
                                 onChange={handleInputChange}
                                 required
-                                placeholder="Nhập số điện thoại"
+                                placeholder="VD: 0901234567"
+                                className={errors.phone ? "border-red-500 focus:border-red-500" : ""}
                             />
+                            {hasSubmitted && errors.phone && (
+                                <p className="text-sm text-red-500 flex items-center gap-1">
+                                    <AlertCircle className="h-4 w-4" />
+                                    {errors.phone}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -126,8 +259,15 @@ export default function MemberRegistration({
                             value={formData.email}
                             onChange={handleInputChange}
                             required
-                            placeholder="Nhập email"
+                            placeholder="VD: example@email.com"
+                            className={errors.email ? "border-red-500 focus:border-red-500" : ""}
                         />
+                        {hasSubmitted && errors.email && (
+                            <p className="text-sm text-red-500 flex items-center gap-1">
+                                <AlertCircle className="h-4 w-4" />
+                                {errors.email}
+                            </p>
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -137,9 +277,19 @@ export default function MemberRegistration({
                             name="notes"
                             value={formData.notes}
                             onChange={handleInputChange}
-                            placeholder="Ghi chú thêm (nếu có)"
+                            placeholder="Ghi chú thêm về nhu cầu học (nếu có)"
                             rows={3}
+                            className={errors.notes ? "border-red-500 focus:border-red-500" : ""}
                         />
+                        {hasSubmitted && errors.notes && (
+                            <p className="text-sm text-red-500 flex items-center gap-1">
+                                <AlertCircle className="h-4 w-4" />
+                                {errors.notes}
+                            </p>
+                        )}
+                        <p className="text-xs text-gray-500">
+                            {formData.notes.length}/500 ký tự
+                        </p>
                     </div>
 
                     <div className="flex gap-3 pt-4">
@@ -153,7 +303,7 @@ export default function MemberRegistration({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isLoading}
+                            disabled={isLoading || !isFormValid()}
                             className="flex-1"
                         >
                             {isLoading ? (
