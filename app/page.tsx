@@ -1,17 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import BookCoverSection from "@/components/book-cover-section"
+import CoursesSection from "@/components/courses-section"
+import CTASection from "@/components/cta-section"
+import FeaturesSection from "@/components/features-section"
+import Footer from "@/components/footer"
 import Header from "@/components/header"
 import HeroSection from "@/components/hero-section"
-import WorkshopSection from "@/components/workshop-section"
-import FeaturesSection from "@/components/features-section"
-import CoursesSection from "@/components/courses-section"
 import InstructorSection from "@/components/instructor-section"
-import BookCoverSection from "@/components/book-cover-section"
-import CTASection from "@/components/cta-section"
-import Footer from "@/components/footer"
 import IntroQuote from "@/components/intro-quote"
 import TestimonialsSection from "@/components/testimonials-section"
+import { useState } from "react"
 
 export default function HomePage() {
   const [showIntro, setShowIntro] = useState(true)
