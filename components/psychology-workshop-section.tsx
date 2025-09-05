@@ -11,7 +11,7 @@ export default function PsychologyWorkshopSection() {
       {/* Background with Iridescence - Render on all devices */}
       <div className="absolute inset-0 opacity-20 pointer-events-none z-0">
         <Iridescence
-          color={[0.0, 0.29, 0.46]} // Convert #004976 to normalized RGB
+          color={[1.0, 1.0, 1.0]} // White color instead of blue
           speed={0.3}
           amplitude={0.05}
           mouseReact={false}
