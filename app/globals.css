@@ -160,7 +160,25 @@
   will-change: transform;
 }
 
-/* Animation classes will be handled by GSAP only to prevent hydration mismatch */
+.gsap-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.gsap-slide-in-left {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.gsap-slide-in-right {
+  opacity: 0;
+  transform: translateX(50px);
+}
+
+.gsap-scale-in {
+  opacity: 0;
+  transform: scale(0.8);
+}
 
 /* Added styles for intro quote */
 .intro-quote {
@@ -181,79 +199,5 @@
   51%,
   100% {
     opacity: 0;
-  }
-}
-
-/* Mobile touch scrolling fixes */
-html, body {
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  touch-action: manipulation;
-  height: 100%;
-}
-
-/* Remove tap highlights but keep interactions */
-* {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-}
-
-/* Ensure buttons and links are touchable */
-button, a, [role="button"], input, textarea, select {
-  touch-action: manipulation;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  cursor: pointer;
-}
-
-/* Ensure text inputs can be selected */
-input[type="text"], input[type="email"], input[type="password"], textarea {
-  -webkit-user-select: text;
-  -moz-user-select: text;
-  user-select: text;
-}
-
-/* Fix background elements that shouldn't block interactions */
-.pointer-events-none {
-  pointer-events: none !important;
-}
-
-/* Fix for iOS Safari */
-@supports (-webkit-touch-callout: none) {
-  html, body {
-    height: 100vh;
-    overflow: auto;
-    position: relative;
-  }
-  
-  /* Ensure scrollable containers work on iOS */
-  .overflow-auto, .overflow-y-auto, .overflow-scroll {
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Fix for sticky elements on iOS */
-  .sticky, .fixed {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-  }
-}
-
-/* Ensure proper touch targets */
-@media (max-width: 768px) {
-  button, a, [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
-    padding: 8px;
-  }
-  
-  /* Prevent canvas from blocking touches */
-  canvas {
-    pointer-events: none;
-  }
-  
-  /* Allow interactions on interactive canvases only when explicitly needed */
-  canvas.interactive {
-    pointer-events: auto;
   }
 }

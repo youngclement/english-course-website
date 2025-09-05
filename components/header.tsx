@@ -33,7 +33,7 @@ export default function Header() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 transition-all duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
-          } ${isScrolled ? "z-50 bg-white/95 backdrop-blur-md shadow-lg" : "z-50 bg-transparent"}`}
+          } ${isScrolled ? "z-[100] bg-white/95 backdrop-blur-md shadow-lg" : "z-[100] bg-white/90 backdrop-blur-sm"}`}
       >
         <div className="container mx-auto px-4 md:px-8 lg:px-28">
           {/* ===== Desktop (>= md) ===== */}
@@ -132,15 +132,15 @@ export default function Header() {
             />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`${isScrolled ? "text-gray-700" : "text-white"}`}
+              className="text-gray-800 hover:text-primary transition-colors z-[101] relative p-2 rounded-lg bg-white/80 backdrop-blur-sm shadow-sm border border-gray-200/50"
             >
-              {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
         {/* Mobile menu (tuỳ chọn giữ như cũ) */}
-        <div className={`md:hidden bg-white border-t shadow-lg relative z-50 transition-all duration-300 ease-in-out overflow-hidden ${isMobileMenuOpen
+        <div className={`md:hidden bg-white border-t shadow-lg relative z-[100] transition-all duration-300 ease-in-out overflow-hidden ${isMobileMenuOpen
           ? 'max-h-96 opacity-100 translate-y-0'
           : 'max-h-0 opacity-0 -translate-y-4'
           }`}>
