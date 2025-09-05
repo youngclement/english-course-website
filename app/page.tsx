@@ -2,6 +2,7 @@
 
 import BookCoverSection from "@/components/book-cover-section"
 import CoursesSection from "@/components/courses-section"
+import CourseHighlightSection from "@/components/course-highlight-section"
 import CTASection from "@/components/cta-section"
 import FeaturesSection from "@/components/features-section"
 import Footer from "@/components/footer"
@@ -29,12 +30,15 @@ export default function HomePage() {
 
         <HeroSection />
 
-
+        <PsychologyWorkshopSection />
+        
+        <CourseHighlightSection />
+        
         <div className="bg-[#F9F9F9]">
           <FeaturesSection />
         </div>
 
-        <PsychologyWorkshopSection />
+       
 
         <div className="bg-[#F9F9F9]">
           <CoursesSection />

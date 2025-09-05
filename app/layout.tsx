@@ -81,7 +81,7 @@ export const metadata: Metadata = {
       "Khóa học Tâm Lý Học Hành Vi & Xã Hội chuyên sâu, giúp bạn hiểu rõ tâm lý con người và ứng dụng trong cuộc sống, công việc và nuôi dạy con.",
     images: [
       {
-        url: "/bhv-english-logo-transparent.png",
+        url: "/course-banner.jpg",
         width: 1200,
         height: 630,
         alt: "BHV English - Khóa Học Tâm Lý Học Hành Vi & Xã Hội",
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
     title: "Khóa Học Tâm Lý Học Hành Vi & Xã Hội - Thầy Huỳnh Chí Viễn",
     description:
       "Khóa học Tâm Lý Học Hành Vi & Xã Hội chuyên sâu, giúp bạn hiểu rõ tâm lý con người và ứng dụng trong cuộc sống, công việc và nuôi dạy con.",
-    images: ["/bhv-english-logo-transparent.png"],
+    images: ["/course-banner.jpg"],
     creator: "@bhvenglish",
   },
   robots: {
