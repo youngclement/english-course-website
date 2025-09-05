@@ -179,7 +179,7 @@ export default function InstructorSection() {
                 </p>
 
                 <p>
-                  Với phương pháp giảng dạy độc đáo, thầy Viễn đã giúp hàng trăm học viên hiểu rõ hơn về bản thân, cải thiện các mối quan hệ và áp dụng kiến thức tâm lý học vào cuộc sống hàng ngày một cách hiệu quả. Thầy từng đạt giải "Tâm Huyết Giáo Dục" 3 năm liền (2009, 2010, 2011) và có kinh nghiệm giảng dạy tại nhiều trường đại học danh tiếng.
+                  Với phương pháp giảng dạy độc đáo, thầy Viễn đã giúp hàng trăm học viên hiểu rõ hơn về bản thân, cải thiện các mối quan hệ và áp dụng kiến thức tâm lý học vào cuộc sống hằng ngày một cách hiệu quả. Thầy từng đạt giải "Tâm Huyết Giáo Dục" 3 năm liền (2009, 2010, 2011) và có kinh nghiệm giảng dạy tại nhiều trường đại học danh tiếng.
                 </p>
 
 

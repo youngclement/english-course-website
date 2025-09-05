@@ -2,7 +2,7 @@ export default function FeaturesSection() {
   const objectives = [
     {
       title: "Hiểu Đúng Tâm Lý Hành Vi",
-      description: "Hiểu đúng về tâm lý hành vi cá nhân và xã hội trong thời đại hiện đại.",
+      description: "Hiểu đúng về tâm lý hành vi cá nhân và xã hội thời hiện đại.",
       image: "/course-desc-1.jpg",
     },
     {
@@ -18,12 +18,12 @@ export default function FeaturesSection() {
     },
     {
       title: "Nuôi Dạy Con Khoa Học",
-      description: "Nuôi dạy con một cách khoa học, văn minh và giàu hiểu biết về tâm lý.",
+      description: "Nuôi dạy con khoa học, văn minh với sự thấu hiểu tâm lý sâu sắc.",
       image: "/course-desc-4.jpg",
     },
     {
       title: "Thay Đổi Nhận Thức",
-      description: "Thay đổi nhận thức và hành vi để sống hạnh phúc và thành công hơn.",
+      description: "Thay đổi nhận thức và hành vi để sống hạnh phúc và thành công trọn vẹn.",
       image: "/course-desc-9.png",
     },
   ]

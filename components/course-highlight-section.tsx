@@ -10,12 +10,12 @@ export default function CourseHighlightSection() {
         <div className="text-center max-w-4xl mx-auto">
           {/* Main Title */}
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-            KHOÁ HỌC TÂM LÝ HỌC<br />HÀNH VI & XÃ HỘI
+            KHÓA HỌC TÂM LÝ HỌC<br />HÀNH VI & XÃ HỘI
           </h2>
           
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-white/90 font-semibold ">
-            Khoá học <span className="text-white font-bold">ĐỘC QUYỀN</span> chỉ diễn ra 1 lần trong năm.
+            Khóa học <span className="text-white font-bold">ĐỘC QUYỀN</span> chỉ diễn ra 1 lần trong năm.
           </p>
           
         
