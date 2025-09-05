@@ -30,11 +30,11 @@ export default function PsychologyWorkshopSection() {
 
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8">
-            {/* Workshop Information - Mobile First */}
-            <div className="order-1 lg:order-2 lg:col-span-1 space-y-3 sm:space-y-4 relative z-30">
+            {/* Workshop Information */}
+            <div className="order-2 lg:order-2 lg:col-span-1 space-y-3 sm:space-y-4 relative z-30">
               {/* Workshop Details */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
-                <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/95 shadow-sm border border-gray-100 relative z-30">
+                <div className="flex items-center space-x-3 p-3 relative z-30">
                   <div className="w-8 h-8 bg-[#004976] rounded-full flex items-center justify-center flex-shrink-0">
                     <Calendar className="h-4 w-4 text-white" />
                   </div>
@@ -45,7 +45,7 @@ export default function PsychologyWorkshopSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/95 shadow-sm border border-gray-100 relative z-30">
+                <div className="flex items-center space-x-3 p-3 relative z-30">
                   <div className="w-8 h-8 bg-[#004976] rounded-full flex items-center justify-center flex-shrink-0">
                     <MapPin className="h-4 w-4 text-white" />
                   </div>
@@ -55,7 +55,7 @@ export default function PsychologyWorkshopSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/95 shadow-sm border border-gray-100 relative z-30">
+                <div className="flex items-center space-x-3 p-3 relative z-30">
                   <div className="w-8 h-8 bg-[#004976] rounded-full flex items-center justify-center flex-shrink-0">
                     <Users className="h-4 w-4 text-white" />
                   </div>
@@ -66,7 +66,7 @@ export default function PsychologyWorkshopSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/95 shadow-sm border border-gray-100 relative z-30">
+                <div className="flex items-center space-x-3 p-3 relative z-30">
                   <div className="w-8 h-8 bg-[#004976] rounded-full flex items-center justify-center flex-shrink-0">
                     <Clock className="h-4 w-4 text-white" />
                   </div>
@@ -78,7 +78,7 @@ export default function PsychologyWorkshopSection() {
               </div>
 
               {/* Workshop Content - Simplified */}
-              <div className="bg-white/90 p-4 rounded-lg shadow-sm border border-gray-100">
+              <div className="p-4">
                 <h4 className="font-semibold text-gray-900 mb-3 text-sm">Trong 90 phút, hội thảo sẽ giúp bạn:</h4>
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-2">
@@ -123,7 +123,7 @@ export default function PsychologyWorkshopSection() {
             </div>
 
             {/* Workshop Banner Image */}
-            <div className="order-2 lg:order-1 lg:col-span-2 relative z-20">
+            <div className="order-1 lg:order-1 lg:col-span-2 relative z-20">
               <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 rounded-lg overflow-hidden bg-white shadow-sm border border-gray-100">
                 <img 
                   src="workshop-banner.jpg" 
