@@ -3,28 +3,28 @@ export default function FeaturesSection() {
     {
       title: "Hiểu Đúng Tâm Lý Hành Vi",
       description: "Hiểu đúng về tâm lý hành vi cá nhân và xã hội trong thời đại hiện đại.",
-      image: "/img-content-1.png",
+      image: "/course-desc-1.jpg",
     },
     {
       title: "Phân Tích & Ứng Dụng",
       description:
         "Phân tích, lý giải và ứng dụng kiến thức tâm lý trong các mối quan hệ cá nhân, gia đình, tình cảm, công việc và xã hội.",
-      image: "/img-content-2.png",
+      image: "/course-desc-2.png",
     },
     {
       title: "Phát Triển EQ & Giao Tiếp",
       description: "Phát triển trí tuệ cảm xúc (EQ), khả năng tư duy phản biện và kỹ năng giao tiếp.",
-      image: "/img-content-3.png",
+      image: "/course-desc-3.jpg",
     },
     {
       title: "Nuôi Dạy Con Khoa Học",
       description: "Nuôi dạy con một cách khoa học, văn minh và giàu hiểu biết về tâm lý.",
-      image: "/img-content-4.png",
+      image: "/course-desc-4.jpg",
     },
     {
       title: "Thay Đổi Nhận Thức",
       description: "Thay đổi nhận thức và hành vi để sống hạnh phúc và thành công hơn.",
-      image: "/img-content-5.png",
+      image: "/course-desc-9.png",
     },
   ]
 
