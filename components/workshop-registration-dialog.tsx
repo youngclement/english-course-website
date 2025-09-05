@@ -190,7 +190,12 @@ export default function WorkshopRegistrationDialog({
   return (
     <Dialog open={open} onOpenChange={(newOpen) => {
       setOpen(newOpen)
-      if (!newOpen) {
+      if (newOpen) {
+        // Dispatch event to hide header when dialog opens
+        window.dispatchEvent(new CustomEvent('dialog-open'))
+      } else {
+        // Dispatch event to show header when dialog closes
+        window.dispatchEvent(new CustomEvent('dialog-close'))
         resetDialog()
       }
     }}>

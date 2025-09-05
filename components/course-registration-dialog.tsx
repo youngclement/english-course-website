@@ -228,7 +228,16 @@ export default function CourseRegistrationDialog({
     )
 
     return (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogOpen} onOpenChange={(newOpen) => {
+            setIsDialogOpen(newOpen)
+            if (newOpen) {
+                // Dispatch event to hide header when dialog opens
+                window.dispatchEvent(new CustomEvent('dialog-open'))
+            } else {
+                // Dispatch event to show header when dialog closes
+                window.dispatchEvent(new CustomEvent('dialog-close'))
+            }
+        }}>
             <DialogTrigger asChild>
                 {trigger || defaultTrigger}
             </DialogTrigger>

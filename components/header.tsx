@@ -12,6 +12,7 @@ export default function Header() {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => {
@@ -29,11 +30,26 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [lastScrollY])
 
+  // Listen for dialog state changes
+  useEffect(() => {
+    const handleDialogOpen = () => setIsDialogOpen(true)
+    const handleDialogClose = () => setIsDialogOpen(false)
+    
+    window.addEventListener('dialog-open', handleDialogOpen)
+    window.addEventListener('dialog-close', handleDialogClose)
+    
+    return () => {
+      window.removeEventListener('dialog-open', handleDialogOpen)
+      window.removeEventListener('dialog-close', handleDialogClose)
+    }
+  }, [])
+
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 transition-all duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
-          } ${isScrolled || isMobileMenuOpen ? "z-[100] bg-white/95 backdrop-blur-md shadow-lg" : "z-[100] bg-transparent"}`}
+        className={`fixed top-0 left-0 right-0 transition-all duration-300 ${
+          isVisible && !isDialogOpen ? "translate-y-0" : "-translate-y-full"
+        } ${isScrolled || isMobileMenuOpen ? "z-[100] bg-white/95 backdrop-blur-md shadow-lg" : "z-[100] bg-transparent"}`}
       >
         <div className="container mx-auto px-4 md:px-8 lg:px-28">
           {/* ===== Desktop (>= md) ===== */}
