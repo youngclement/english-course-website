@@ -33,7 +33,7 @@ export default function Header() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 transition-all duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
-          } ${isScrolled ? "z-[100] bg-white/95 backdrop-blur-md shadow-lg" : "z-[100] bg-white/90 backdrop-blur-sm"}`}
+          } ${isScrolled ? "z-[100] bg-white/95 backdrop-blur-md shadow-lg" : "z-[100] bg-transparent"}`}
       >
         <div className="container mx-auto px-4 md:px-8 lg:px-28">
           {/* ===== Desktop (>= md) ===== */}
@@ -130,11 +130,21 @@ export default function Header() {
               alt="BHV English Logo"
               className="w-[50px] h-[50px] object-contain"
             />
+            {/* Hamburger Menu Button - Always Visible on Mobile */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-800 hover:text-primary transition-colors z-[101] relative p-2 rounded-lg bg-white/80 backdrop-blur-sm shadow-sm border border-gray-200/50"
+              className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 ${
+                isScrolled 
+                  ? "text-gray-900 bg-white border-gray-300 hover:bg-gray-50 shadow-md" 
+                  : "text-white bg-black/20 border-white/30 hover:bg-black/30 backdrop-blur-sm"
+              }`}
+              aria-label="Toggle mobile menu"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
         </div>
