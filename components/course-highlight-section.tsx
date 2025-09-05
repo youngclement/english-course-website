@@ -10,7 +10,7 @@ export default function CourseHighlightSection() {
         <div className="text-center max-w-4xl mx-auto">
           {/* Main Title */}
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-            KHOÁ HỌC TÂM LÝ HỌC HÀNH VI & XÃ HỘI
+            KHOÁ HỌC TÂM LÝ HỌC<br />HÀNH VI & XÃ HỘI
           </h2>
           
           {/* Subtitle */}
