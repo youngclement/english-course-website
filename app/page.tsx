@@ -9,6 +9,7 @@ import Header from "@/components/header"
 import HeroSection from "@/components/hero-section"
 import InstructorSection from "@/components/instructor-section"
 import IntroQuote from "@/components/intro-quote"
+import PsychologyWorkshopSection from "@/components/psychology-workshop-section"
 import TestimonialsSection from "@/components/testimonials-section"
 import { useState } from "react"
 
@@ -32,6 +33,8 @@ export default function HomePage() {
         <div className="bg-[#F9F9F9]">
           <FeaturesSection />
         </div>
+
+        <PsychologyWorkshopSection />
 
         <div className="bg-[#F9F9F9]">
           <CoursesSection />
