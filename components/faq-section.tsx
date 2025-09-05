@@ -19,7 +19,7 @@ const faqData: FAQItem[] = [
   {
     question: "Tôi có thể áp dụng kiến thức này vào công việc được không?",
     answer:
-      "Chắc chắn rồi! Kiến thức tâm lý học hành vi và xã hội có thể áp dụng trong nhiều lĩnh vực như quản lý nhân sự, bán hàng, giáo dục, tư vấn và các mối quan hệ công việc hàng ngày.",
+      "Chắc chắn rồi! Kiến thức tâm lý học hành vi và xã hội có thể áp dụng trong nhiều lĩnh vực như quản lý nhân sự, bán hàng, giáo dục, tư vấn và các mối quan hệ công việc hằng ngày.",
   },
   {
     question: "Khóa học có cấp chứng chỉ hoàn thành không?",
@@ -144,7 +144,7 @@ export default function FAQSection() {
             <h3 className="text-xl font-bold text-gray-900">Đảm Bảo Hiệu Quả</h3>
             <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
               Chúng tôi cam kết mang đến chất lượng giảng dạy tốt nhất với phương pháp khoa học, thực tế và dễ áp dụng
-              vào cuộc sống hàng ngày.
+              vào cuộc sống hằng ngày.
             </p>
           </TimelineContent>
         </div>
