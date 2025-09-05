@@ -7,20 +7,20 @@ import Ballpit from "./Ballpit"
 
 export default function PsychologyWorkshopSection() {
   return (
-    <section className="min-h-screen bg-white relative flex items-center py-8 sm:py-12">
-      {/* Background with Ballpit */}
-      <div className="absolute inset-0 opacity-30">
-        <Ballpit
-          count={100}
+    <section className="min-h-screen bg-white relative flex items-center py-8 sm:py-12 overflow-hidden">
+      {/* Background with Ballpit - Completely hidden */}
+      <div className="">
+        {/* <Ballpit
+          count={80}
           gravity={0.3}
           friction={0.9}
           wallBounce={0.8}
-          followCursor={true}
+          followCursor={false}
           colors={[0x004976, 0x0066aa, 0x4d94ff]}
-        />
+        /> */}
       </div>
       
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="container mx-auto px-4 md:px-6 relative z-20">
         <div className="text-center mb-6 sm:mb-8 md:mb-12">
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
             HỘI THẢO TÂM LÝ <span className="text-primary">ONLINE</span>
@@ -33,10 +33,10 @@ export default function PsychologyWorkshopSection() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Workshop Information - Mobile First */}
-            <div className="order-1 lg:order-2 lg:col-span-1 space-y-3 sm:space-y-4">
+            <div className="order-1 lg:order-2 lg:col-span-1 space-y-3 sm:space-y-4 relative z-30">
               {/* Workshop Details */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
-                <div className="flex items-center space-x-3 p-3 rounded-lg">
+                <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/95 shadow-sm border border-gray-100 relative z-30">
                   <div className="w-8 h-8 bg-[#004976] rounded-full flex items-center justify-center flex-shrink-0">
                     <Calendar className="h-4 w-4 text-white" />
                   </div>
@@ -47,7 +47,7 @@ export default function PsychologyWorkshopSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 rounded-lg">
+                <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/95 shadow-sm border border-gray-100 relative z-30">
                   <div className="w-8 h-8 bg-[#004976] rounded-full flex items-center justify-center flex-shrink-0">
                     <MapPin className="h-4 w-4 text-white" />
                   </div>
@@ -57,7 +57,7 @@ export default function PsychologyWorkshopSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 rounded-lg">
+                <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/95 shadow-sm border border-gray-100 relative z-30">
                   <div className="w-8 h-8 bg-[#004976] rounded-full flex items-center justify-center flex-shrink-0">
                     <Users className="h-4 w-4 text-white" />
                   </div>
@@ -68,7 +68,7 @@ export default function PsychologyWorkshopSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 rounded-lg">
+                <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/95 shadow-sm border border-gray-100 relative z-30">
                   <div className="w-8 h-8 bg-[#004976] rounded-full flex items-center justify-center flex-shrink-0">
                     <Clock className="h-4 w-4 text-white" />
                   </div>
@@ -80,7 +80,7 @@ export default function PsychologyWorkshopSection() {
               </div>
 
               {/* Workshop Content - Simplified */}
-              <div className="bg-white/80 backdrop-blur-sm p-4 rounded-lg">
+              <div className="bg-white/90 p-4 rounded-lg shadow-sm border border-gray-100">
                 <h4 className="font-semibold text-gray-900 mb-3 text-sm">Trong 90 phút, hội thảo sẽ giúp bạn:</h4>
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-2">
@@ -115,18 +115,18 @@ export default function PsychologyWorkshopSection() {
               </div>
 
               {/* Registration Button */}
-              <div className="text-center pt-2">
+              <div className="text-center pt-2 relative z-30">
                 <WorkshopRegistrationDialog 
                   buttonText="Đăng Ký Ngay"
                   buttonSize="default"
-                  className="bg-[#004976] hover:bg-[#003866] text-white px-6 py-2 w-full sm:w-auto"
+                  className="bg-[#004976] hover:bg-[#003866] text-white px-6 py-2 w-full sm:w-auto relative z-40 touch-manipulation"
                 />
               </div>
             </div>
 
             {/* Workshop Banner Image */}
-            <div className="order-2 lg:order-1 lg:col-span-2">
-              <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 rounded-lg overflow-hidden">
+            <div className="order-2 lg:order-1 lg:col-span-2 relative z-20">
+              <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 rounded-lg overflow-hidden bg-white shadow-sm border border-gray-100">
                 <img 
                   src="workshop-banner.jpg" 
                   alt="Hội thảo tâm lý về người ái kỷ" 

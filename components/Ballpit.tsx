@@ -795,8 +795,9 @@ function createBallpit(canvas: HTMLCanvasElement, config: any = {}): CreateBallp
   const intersectionPoint = new Vector3();
   let isPaused = false;
 
-  canvas.style.touchAction = 'none';
+  canvas.style.touchAction = 'pan-y'; // Allow vertical scrolling
   canvas.style.userSelect = 'none';
+  canvas.style.pointerEvents = 'none'; // Make canvas non-interactive
   (canvas.style as any).webkitUserSelect = 'none';
 
   const pointerData = createPointerData({
