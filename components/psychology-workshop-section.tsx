@@ -8,8 +8,8 @@ import Iridescence from "./Iridescence"
 export default function PsychologyWorkshopSection() {
   return (
     <section className="min-h-screen bg-white relative flex items-center py-8 sm:py-12 overflow-hidden">
-      {/* Background with Iridescence - Hidden on mobile for performance */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none z-0 hidden sm:block">
+      {/* Background with Iridescence - Render on all devices */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none z-0">
         <Iridescence
           color={[0.0, 0.29, 0.46]} // Convert #004976 to normalized RGB
           speed={0.3}
