@@ -9,11 +9,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
-import { Loader2, Search, Eye, CheckCircle, XCircle, Trash2, RefreshCw, GalleryVerticalEnd } from "lucide-react"
+import { Loader2, Search, Eye, CheckCircle, XCircle, Trash2, RefreshCw, GalleryVerticalEnd, Download } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { LoginForm } from "@/components/login-form"
 import { AdminSidebar } from "@/components/admin-sidebar"
 import { AdminHeader } from "@/components/admin-header"
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 import {
   SidebarInset,
   SidebarProvider,
@@ -278,6 +280,153 @@ export default function AdminDashboard() {
         return <Badge variant={config.variant}>{config.label}</Badge>
     }
 
+    // Excel Export Functions
+    const exportCourseRegistrationsToExcel = () => {
+        try {
+            const data = courseRegistrations.map((reg, index) => ({
+                'STT': index + 1,
+                'Họ và tên': reg.full_name,
+                'Email': reg.email,
+                'Số điện thoại': reg.phone,
+                'Khóa học': reg.course_name,
+                'Trạng thái': reg.status === 'pending' ? 'Chờ duyệt' : 
+                            reg.status === 'approved' ? 'Đã duyệt' : 
+                            reg.status === 'rejected' ? 'Từ chối' : reg.status,
+                'Ngày đăng ký': new Date(reg.createdAt).toLocaleDateString('vi-VN'),
+                'Ghi chú': reg.notes || ''
+            }))
+
+            const ws = XLSX.utils.json_to_sheet(data)
+            const wb = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(wb, ws, "Đăng ký khóa học")
+            
+            // Auto-fit columns
+            const colWidths = [
+                { wch: 5 },  // STT
+                { wch: 20 }, // Họ và tên
+                { wch: 25 }, // Email
+                { wch: 15 }, // Số điện thoại
+                { wch: 20 }, // Khóa học
+                { wch: 12 }, // Trạng thái
+                { wch: 15 }, // Ngày đăng ký
+                { wch: 30 }  // Ghi chú
+            ]
+            ws['!cols'] = colWidths
+
+            const fileName = `danh-sach-dang-ky-khoa-hoc-${new Date().toISOString().split('T')[0]}.xlsx`
+            XLSX.writeFile(wb, fileName)
+            
+            toast({
+                title: "Xuất Excel thành công!",
+                description: `Đã tải file ${fileName}`,
+            })
+        } catch (error) {
+            toast({
+                title: "Xuất Excel thất bại",
+                description: "Có lỗi xảy ra khi xuất file Excel",
+                variant: "destructive",
+            })
+        }
+    }
+
+    const exportMemberRegistrationsToExcel = () => {
+        try {
+            const data = memberRegistrations.map((reg, index) => ({
+                'STT': index + 1,
+                'Họ và tên': reg.full_name,
+                'Email': reg.email,
+                'Số điện thoại': reg.phone,
+                'Trạng thái': reg.status === 'pending' ? 'Chờ duyệt' : 
+                            reg.status === 'active' ? 'Hoạt động' : 
+                            reg.status === 'inactive' ? 'Không hoạt động' : reg.status,
+                'Ngày đăng ký': new Date(reg.createdAt).toLocaleDateString('vi-VN'),
+                'Ghi chú': reg.notes || ''
+            }))
+
+            const ws = XLSX.utils.json_to_sheet(data)
+            const wb = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(wb, ws, "Thành viên")
+            
+            // Auto-fit columns
+            const colWidths = [
+                { wch: 5 },  // STT
+                { wch: 20 }, // Họ và tên
+                { wch: 25 }, // Email
+                { wch: 15 }, // Số điện thoại
+                { wch: 12 }, // Trạng thái
+                { wch: 15 }, // Ngày đăng ký
+                { wch: 30 }  // Ghi chú
+            ]
+            ws['!cols'] = colWidths
+
+            const fileName = `danh-sach-thanh-vien-${new Date().toISOString().split('T')[0]}.xlsx`
+            XLSX.writeFile(wb, fileName)
+            
+            toast({
+                title: "Xuất Excel thành công!",
+                description: `Đã tải file ${fileName}`,
+            })
+        } catch (error) {
+            toast({
+                title: "Xuất Excel thất bại",
+                description: "Có lỗi xảy ra khi xuất file Excel",
+                variant: "destructive",
+            })
+        }
+    }
+
+    const exportConsultationRegistrationsToExcel = () => {
+        try {
+            const data = consultationRegistrations.map((reg, index) => ({
+                'STT': index + 1,
+                'Họ và tên': reg.full_name,
+                'Email': reg.email,
+                'Số điện thoại': reg.phone,
+                'Loại tư vấn': reg.consultation_type === 'career' ? 'Nghề nghiệp' :
+                              reg.consultation_type === 'study' ? 'Học tập' :
+                              reg.consultation_type === 'personal' ? 'Cá nhân' : reg.consultation_type,
+                'Trạng thái': reg.status === 'pending' ? 'Chờ duyệt' : 
+                            reg.status === 'confirmed' ? 'Đã xác nhận' : 
+                            reg.status === 'completed' ? 'Hoàn thành' :
+                            reg.status === 'cancelled' ? 'Đã hủy' : 
+                            reg.status === 'rescheduled' ? 'Đã dời lịch' : reg.status,
+                'Ngày đăng ký': new Date(reg.createdAt).toLocaleDateString('vi-VN'),
+                'Ghi chú': reg.additional_notes || ''
+            }))
+
+            const ws = XLSX.utils.json_to_sheet(data)
+            const wb = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(wb, ws, "Đăng ký tư vấn")
+            
+            // Auto-fit columns
+            const colWidths = [
+                { wch: 5 },  // STT
+                { wch: 20 }, // Họ và tên
+                { wch: 25 }, // Email
+                { wch: 15 }, // Số điện thoại
+                { wch: 15 }, // Loại tư vấn
+                { wch: 12 }, // Trạng thái
+                { wch: 15 }, // Ngày đăng ký
+                { wch: 30 }  // Ghi chú
+            ]
+            ws['!cols'] = colWidths
+
+            const fileName = `danh-sach-dang-ky-tu-van-${new Date().toISOString().split('T')[0]}.xlsx`
+            XLSX.writeFile(wb, fileName)
+            
+            toast({
+                title: "Xuất Excel thành công!",
+                description: `Đã tải file ${fileName}`,
+            })
+        } catch (error) {
+            toast({
+                title: "Xuất Excel thất bại",
+                description: "Có lỗi xảy ra khi xuất file Excel",
+                variant: "destructive",
+            })
+        }
+    }
+
     if (!isLoggedIn) {
         return (
             <div className="grid min-h-svh lg:grid-cols-2">
@@ -335,8 +484,19 @@ export default function AdminDashboard() {
                         {currentTab === "courses" && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Đăng ký khóa học</CardTitle>
-                                    <CardDescription>Quản lý các đăng ký khóa học</CardDescription>
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <CardTitle>Đăng ký khóa học</CardTitle>
+                                            <CardDescription>Quản lý các đăng ký khóa học</CardDescription>
+                                        </div>
+                                        <Button
+                                            onClick={exportCourseRegistrationsToExcel}
+                                            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+                                        >
+                                            <Download className="h-4 w-4" />
+                                            Xuất Excel
+                                        </Button>
+                                    </div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex gap-4 mb-6">
@@ -493,8 +653,19 @@ export default function AdminDashboard() {
                         {currentTab === "members" && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Đăng ký thành viên</CardTitle>
-                                    <CardDescription>Quản lý các đăng ký thành viên</CardDescription>
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <CardTitle>Đăng ký thành viên</CardTitle>
+                                            <CardDescription>Quản lý các đăng ký thành viên</CardDescription>
+                                        </div>
+                                        <Button
+                                            onClick={exportMemberRegistrationsToExcel}
+                                            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+                                        >
+                                            <Download className="h-4 w-4" />
+                                            Xuất Excel
+                                        </Button>
+                                    </div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex gap-4 mb-6">
@@ -624,8 +795,19 @@ export default function AdminDashboard() {
                         {currentTab === "consultations" && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Đăng ký tư vấn</CardTitle>
-                                    <CardDescription>Quản lý các đăng ký tư vấn</CardDescription>
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <CardTitle>Đăng ký tư vấn</CardTitle>
+                                            <CardDescription>Quản lý các đăng ký tư vấn</CardDescription>
+                                        </div>
+                                        <Button
+                                            onClick={exportConsultationRegistrationsToExcel}
+                                            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+                                        >
+                                            <Download className="h-4 w-4" />
+                                            Xuất Excel
+                                        </Button>
+                                    </div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex gap-4 mb-6">
