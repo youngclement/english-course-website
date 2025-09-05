@@ -3,21 +3,19 @@
 import { Button } from "@/components/ui/button"
 import { Calendar, Clock, MapPin, Users } from "lucide-react"
 import WorkshopRegistrationDialog from "./workshop-registration-dialog"
-import Ballpit from "./Ballpit"
+import Iridescence from "./Iridescence"
 
 export default function PsychologyWorkshopSection() {
   return (
     <section className="min-h-screen bg-white relative flex items-center py-8 sm:py-12 overflow-hidden">
-      {/* Background with Ballpit - Completely hidden */}
-      <div className="">
-        {/* <Ballpit
-          count={80}
-          gravity={0.3}
-          friction={0.9}
-          wallBounce={0.8}
-          followCursor={false}
-          colors={[0x004976, 0x0066aa, 0x4d94ff]}
-        /> */}
+      {/* Background with Iridescence - Hidden on mobile for performance */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none z-0 hidden sm:block">
+        <Iridescence
+          color={[0.0, 0.29, 0.46]} // Convert #004976 to normalized RGB
+          speed={0.3}
+          amplitude={0.05}
+          mouseReact={false}
+        />
       </div>
       
       <div className="container mx-auto px-4 md:px-6 relative z-20">
