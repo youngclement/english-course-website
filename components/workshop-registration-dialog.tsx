@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Loader2, CheckCircle, AlertCircle, QrCode, Users, ArrowRight } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { memberAPI, handleApiError } from "@/lib/api"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
 interface WorkshopRegistrationDialogProps {
@@ -17,6 +16,27 @@ interface WorkshopRegistrationDialogProps {
   buttonVariant?: "default" | "outline" | "secondary" | "destructive" | "ghost" | "link"
   buttonSize?: "default" | "sm" | "lg" | "icon"
   className?: string
+}
+
+interface ValidationErrors {
+  full_name?: string
+  email?: string
+  phone?: string
+}
+
+// Validation functions
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+const validatePhone = (phone: string): boolean => {
+  const phoneRegex = /^(\+84|84|0)(3|5|7|8|9)\d{8}$/
+  return phoneRegex.test(phone.replace(/\s+/g, ''))
+}
+
+const validateFullName = (name: string): boolean => {
+  return name.trim().length >= 2 && /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵýỷỹ\s]+$/.test(name.trim())
 }
 
 export default function WorkshopRegistrationDialog({
@@ -30,6 +50,7 @@ export default function WorkshopRegistrationDialog({
   const [step, setStep] = useState(1) // 1: form, 2: payment QR, 3: group QR
   const [isLoading, setIsLoading] = useState(false)
   const [registrationId, setRegistrationId] = useState("")
+  const [errors, setErrors] = useState<ValidationErrors>({})
   
   const [formData, setFormData] = useState({
     full_name: "",
@@ -61,10 +82,57 @@ export default function WorkshopRegistrationDialog({
       ...prev,
       [name]: value,
     }))
+    
+    // Clear errors when user starts typing
+    if (errors[name as keyof ValidationErrors]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }))
+    }
+  }
+
+  const validateForm = (): boolean => {
+    const newErrors: ValidationErrors = {}
+
+    // Validate full name
+    if (!formData.full_name.trim()) {
+      newErrors.full_name = "Vui lòng nhập họ và tên"
+    } else if (!validateFullName(formData.full_name)) {
+      newErrors.full_name = "Họ và tên phải có ít nhất 2 ký tự và chỉ chứa chữ cái"
+    }
+
+    // Validate email
+    if (!formData.email.trim()) {
+      newErrors.email = "Vui lòng nhập email"
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Email không đúng định dạng"
+    }
+
+    // Validate phone
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Vui lòng nhập số điện thoại"
+    } else if (!validatePhone(formData.phone)) {
+      newErrors.phone = "Số điện thoại không đúng định dạng (VD: 0901234567)"
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validate form before submitting
+    if (!validateForm()) {
+      toast({
+        title: "Thông tin không hợp lệ",
+        description: "Vui lòng kiểm tra lại thông tin đã nhập.",
+        variant: "destructive",
+      })
+      return
+    }
+
     setIsLoading(true)
 
     try {
@@ -116,6 +184,7 @@ export default function WorkshopRegistrationDialog({
       notes: "",
     })
     setRegistrationId("")
+    setErrors({})
   }
 
   return (
@@ -142,53 +211,61 @@ export default function WorkshopRegistrationDialog({
 
         {/* Step 1: Registration Form */}
         {step === 1 && (
-          <div className="space-y-6">
+          <div className="space-y-4">
+            {/* Workshop Banner */}
+            <div className="relative w-full h-24 rounded-lg overflow-hidden mb-3">
+              <img 
+                src="/workshop-banner.jpg" 
+                alt="Hội thảo tâm lý về người ái kỷ" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 flex items-center justify-center">
+                <div className="text-center text-white px-4">
+                  <h4 className="text-xs font-bold">HỘI THẢO TÂM LÝ ONLINE</h4>
+                  <p className="text-xs opacity-90">"Tâm lý người ái kỷ và cách tự bảo vệ mình"</p>
+                </div>
+              </div>
+            </div>
+
             {/* Workshop Info */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg text-primary">{workshopInfo.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+            <div>
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label className="font-semibold">Ngày tổ chức:</Label>
-                    <p>{workshopInfo.date}</p>
+                    <Label className="font-semibold text-xs">Ngày tổ chức:</Label>
+                    <p className="text-sm">Thứ Bảy, 04/10/2025</p>
                   </div>
                   <div>
-                    <Label className="font-semibold">Thời gian:</Label>
-                    <p>{workshopInfo.time}</p>
+                    <Label className="font-semibold text-xs">Thời gian:</Label>
+                    <p className="text-sm">20h00 – 21h30</p>
                   </div>
                   <div>
-                    <Label className="font-semibold">Hình thức:</Label>
-                    <p>{workshopInfo.venue}</p>
+                    <Label className="font-semibold text-xs">Hình thức:</Label>
+                    <p className="text-sm">Online qua Zoom</p>
                   </div>
                   <div>
-                    <Label className="font-semibold">Giá vé:</Label>
-                    <Badge variant="default" className="text-lg">{workshopInfo.price}</Badge>
+                    <Label className="font-semibold text-xs">Giá vé:</Label>
+                    <Badge variant="default" className="text-sm">199.000đ</Badge>
                   </div>
                 </div>
                 
                 <div>
-                  <Label className="font-semibold">Diễn giả:</Label>
-                  <p>{workshopInfo.speaker}</p>
-                </div>
-
-                <div>
-                  <Label className="font-semibold">Nội dung chính:</Label>
-                  <ul className="list-disc list-inside space-y-1 mt-2">
-                    {workshopInfo.topics.map((topic, index) => (
-                      <li key={index} className="text-sm">{topic}</li>
-                    ))}
+                  <Label className="font-semibold text-xs">Nội dung chính:</Label>
+                  <ul className="list-disc list-inside space-y-1 mt-1">
+                    <li className="text-xs">Nhận diện tính cách người ái kỷ</li>
+                    <li className="text-xs">Hiểu gốc rễ nhân cách ái kỷ</li>
+                    <li className="text-xs">Khám phá cách họ suy nghĩ và thao túng</li>
+                    <li className="text-xs">Chiến lược bảo vệ bản thân</li>
                   </ul>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Registration Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="full_name">Họ và tên *</Label>
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label htmlFor="full_name" className="text-xs">Họ và tên *</Label>
                   <Input
                     id="full_name"
                     name="full_name"
@@ -196,10 +273,17 @@ export default function WorkshopRegistrationDialog({
                     onChange={handleInputChange}
                     required
                     placeholder="Nhập họ và tên"
+                    className={`text-sm ${errors.full_name ? 'border-red-500 focus:border-red-500' : ''}`}
                   />
+                  {errors.full_name && (
+                    <p className="text-xs text-red-500 flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
+                      {errors.full_name}
+                    </p>
+                  )}
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Số điện thoại *</Label>
+                <div className="space-y-1">
+                  <Label htmlFor="phone" className="text-xs">Số điện thoại *</Label>
                   <Input
                     id="phone"
                     name="phone"
@@ -208,12 +292,19 @@ export default function WorkshopRegistrationDialog({
                     onChange={handleInputChange}
                     required
                     placeholder="Nhập số điện thoại"
+                    className={`text-sm ${errors.phone ? 'border-red-500 focus:border-red-500' : ''}`}
                   />
+                  {errors.phone && (
+                    <p className="text-xs text-red-500 flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
+                      {errors.phone}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email *</Label>
+              <div className="space-y-1">
+                <Label htmlFor="email" className="text-xs">Email *</Label>
                 <Input
                   id="email"
                   name="email"
@@ -222,25 +313,33 @@ export default function WorkshopRegistrationDialog({
                   onChange={handleInputChange}
                   required
                   placeholder="Nhập email"
+                  className={`text-sm ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
                 />
+                {errors.email && (
+                  <p className="text-xs text-red-500 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3" />
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="notes">Ghi chú (tùy chọn)</Label>
+              <div className="space-y-1">
+                <Label htmlFor="notes" className="text-xs">Ghi chú (tùy chọn)</Label>
                 <Textarea
                   id="notes"
                   name="notes"
                   value={formData.notes}
                   onChange={handleInputChange}
                   placeholder="Nhập ghi chú hoặc câu hỏi..."
-                  rows={3}
+                  rows={2}
+                  className="text-sm h-16"
                 />
               </div>
 
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full text-lg py-6"
+                className="w-full text-sm py-4"
               >
                 {isLoading ? (
                   <>
@@ -260,57 +359,57 @@ export default function WorkshopRegistrationDialog({
 
         {/* Step 2: Payment QR */}
         {step === 2 && (
-          <div className="space-y-6 text-center">
-            <div className="space-y-2">
-              <QrCode className="h-12 w-12 mx-auto text-primary" />
-              <h3 className="text-lg font-semibold">Thanh toán qua QR Code</h3>
-              <p className="text-muted-foreground">
+          <div className="space-y-3 text-center">
+            <div className="space-y-1">
+              <QrCode className="h-8 w-8 mx-auto text-primary" />
+              <h3 className="text-xs font-semibold">Thanh toán qua QR Code</h3>
+              <p className="text-xs text-muted-foreground">
                 Quét mã QR bên dưới để thanh toán {workshopInfo.price}
               </p>
             </div>
 
-            <Card>
-              <CardContent className="p-6 space-y-4">
-                <div className="bg-gray-100 p-4 rounded-lg">
+            <div>
+              <div className="p-3 space-y-2">
+                <div className="p-2 rounded-lg">
                   <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020101021238540010A000000727012700069704220114SACOMBANK1234560208QRIBFTTA53037045802VN5915BHV%20ENGLISH6304C963"
+                    src="/qr-payment-acb.jpg"
                     alt="Payment QR Code"
-                    className="w-48 h-48 mx-auto"
+                    className="w-32 h-32 mx-auto"
                   />
                 </div>
                 
-                <div className="space-y-2 text-left">
+                <div className="space-y-1 text-left">
                   <div className="flex justify-between">
-                    <span className="font-medium">Ngân hàng:</span>
-                    <span>Sacombank</span>
+                    <span className="font-medium text-xs">Ngân hàng:</span>
+                    <span className="text-xs">ACB - NN TMCP Á Châu</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-medium">Số tài khoản:</span>
-                    <span>0123456789</span>
+                    <span className="font-medium text-xs">Số tài khoản:</span>
+                    <span className="text-xs">7879283868</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-medium">Chủ tài khoản:</span>
-                    <span>BHV ENGLISH</span>
+                    <span className="font-medium text-xs">Chủ tài khoản:</span>
+                    <span className="text-xs">CTY TNHH BHV ENGLISH</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-medium">Số tiền:</span>
-                    <span className="text-lg font-bold text-primary">{workshopInfo.price}</span>
+                    <span className="font-medium text-xs">Số tiền:</span>
+                    <span className="text-sm font-bold text-primary">199.000đ</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-medium">Nội dung:</span>
-                    <span className="text-sm">WORKSHOP {registrationId.slice(-6)}</span>
+                    <span className="font-medium text-xs">Nội dung:</span>
+                    <span className="text-xs">Họ và tên Hội thảo tâm lý học</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground">
                 Sau khi chuyển khoản thành công, vui lòng nhấn "Đã thanh toán"
               </p>
               <Button
                 onClick={handlePaymentConfirm}
-                className="w-full text-lg py-6"
+                className="w-full text-sm py-3"
               >
                 Đã thanh toán
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -319,7 +418,7 @@ export default function WorkshopRegistrationDialog({
               <Button
                 variant="outline"
                 onClick={() => setStep(1)}
-                className="w-full"
+                className="w-full text-xs py-2"
               >
                 Quay lại
               </Button>
@@ -329,55 +428,47 @@ export default function WorkshopRegistrationDialog({
 
         {/* Step 3: Group QR */}
         {step === 3 && (
-          <div className="space-y-6 text-center">
-            <div className="space-y-2">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+          <div className="space-y-3 text-center">
+            <div className="space-y-1">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                <CheckCircle className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="text-lg font-semibold text-green-600">Thanh toán thành công!</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-xs font-semibold text-green-600">Thanh toán thành công!</h3>
+              <p className="text-xs text-muted-foreground">
                 Hãy tham gia group hội thảo để nhận thông tin chi tiết
               </p>
             </div>
 
-            <Card>
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center justify-center space-x-2 mb-4">
-                  <Users className="h-6 w-6 text-primary" />
-                  <h4 className="text-lg font-semibold">Group Hội thảo Tâm Lý</h4>
+            <div>
+              <div className="p-3 space-y-2">
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <Users className="h-4 w-4 text-primary" />
+                  <h4 className="text-xs font-semibold">Group Hội thảo Tâm Lý</h4>
                 </div>
                 
-                <div className="bg-gray-100 p-4 rounded-lg">
+                <div className="p-2 rounded-lg">
                   <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://zalo.me/g/workshop-tamly-bhv"
+                    src="/qr-zalo-workshop.jpg"
                     alt="Group QR Code"
-                    className="w-48 h-48 mx-auto"
+                    className="w-32 h-32 mx-auto"
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <p className="font-medium">Quét QR để tham gia group Zalo</p>
-                  <p className="text-sm text-muted-foreground">
+                <div className="space-y-1">
+                  <p className="font-medium text-xs">Quét QR để tham gia group Zalo</p>
+                  <p className="text-xs text-muted-foreground">
                     Hoặc truy cập: <span className="text-primary">zalo.me/g/workshop-tamly-bhv</span>
                   </p>
                 </div>
-              </CardContent>
-            </Card>
-
-            <div className="space-y-3">
-              <div className="bg-blue-50 p-4 rounded-lg text-left">
-                <h5 className="font-semibold text-blue-800 mb-2">Thông tin quan trọng:</h5>
-                <ul className="text-sm text-blue-700 space-y-1">
-                  <li>• Link Zoom sẽ được gửi trước hội thảo 1 ngày</li>
-                  <li>• Tài liệu hội thảo sẽ được chia sẻ trong group</li>
-                  <li>• Hỗ trợ kỹ thuật qua group hoặc hotline</li>
-                  <li>• Có certificate tham dự sau hội thảo</li>
-                </ul>
               </div>
+            </div>
+
+            <div className="space-y-2">
+            
               
               <Button
                 onClick={() => setOpen(false)}
-                className="w-full text-lg py-6"
+                className="w-full text-sm py-3"
               >
                 Hoàn tất đăng ký
               </Button>
