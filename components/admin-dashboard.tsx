@@ -655,8 +655,8 @@ export default function AdminDashboard() {
                                 <CardHeader>
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <CardTitle>Đăng ký thành viên</CardTitle>
-                                            <CardDescription>Quản lý các đăng ký thành viên</CardDescription>
+                                            <CardTitle>Đăng ký thành viên Hội Thảo</CardTitle>
+                                            <CardDescription>Quản lý các Đăng ký thành viên Hội Thảo</CardDescription>
                                         </div>
                                         <Button
                                             onClick={exportMemberRegistrationsToExcel}
