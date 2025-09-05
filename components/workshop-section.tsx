@@ -21,7 +21,7 @@ export default function WorkshopSection() {
     {
       icon: <TrendingUp className="h-6 w-6" />,
       title: "Ứng dụng thực tế",
-      description: "Kỹ năng có thể áp dụng ngay trong cuộc sống hàng ngày"
+      description: "Kỹ năng có thể áp dụng ngay trong cuộc sống hằng ngày"
     },
     {
       icon: <Star className="h-6 w-6" />,
@@ -43,7 +43,7 @@ export default function WorkshopSection() {
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Tham gia hội thảo độc quyền cùng thầy Huỳnh Chí Viễn để khám phá những bí mật của tâm lý học 
-            và cách ứng dụng vào cuộc sống hàng ngày
+            và cách ứng dụng vào cuộc sống hằng ngày
           </p>
         </div>
 

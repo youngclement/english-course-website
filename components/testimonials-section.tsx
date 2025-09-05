@@ -13,7 +13,9 @@ export default function TestimonialsSection() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [desktopAutoIndex, setDesktopAutoIndex] = useState(0)
   const [isDesktopAutoPlaying, setIsDesktopAutoPlaying] = useState(true)
+  const [isUserHovering, setIsUserHovering] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
+  const autoPlayTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const testimonials = [
     {
@@ -58,7 +60,7 @@ export default function TestimonialsSection() {
       course: "Tâm Lý Học Hành Vi & Xã Hội",
       teacher: "Mr. Barry Huỳnh Chí Viễn",
       image: "/nguyentruongthaiha-feedback.jpg",
-      content: `Có nhiều khái niệm em có biết trước đây nhưng ở mức mơ hồ, hoặc bị nhầm lẫn giữa các khái niệm. Nhờ khoá học em đã có thể hiểu rõ hơn, có một kiến thức nền để lý giải, tìm hiểu rộng ra các vấn đề liên quan đến tâm lý và hành vi. Ví dụ: như khái niệm về bản năng, bản ngã, siêu bản ngã.`,
+      content: `Có nhiều khái niệm em có biết trước đây nhưng ở mức mơ hồ, hoặc bị nhầm lẫn giữa các khái niệm. Nhờ khóa học em đã có thể hiểu rõ hơn, có một kiến thức nền để lý giải, tìm hiểu rộng ra các vấn đề liên quan đến tâm lý và hành vi. Ví dụ: như khái niệm về bản năng, bản ngã, siêu bản ngã.`,
       highlight: "Càng học em càng cảm thấy em có lối suy nghĩ khá khác với số đông trong xã hội ở Việt Nam. Tuy nhiên, đó lại là những lối tư duy tích cực, tư duy tốt mà em đã tự học, tự tìm hiểu để phát triển bản thân.",
       benefits: [
         "Thầy dạy rất nhiệt tình, cung cấp kiến thức rất rõ ràng, dễ hiểu",
@@ -84,8 +86,8 @@ export default function TestimonialsSection() {
       course: "Tâm Lý Học Hành Vi & Xã Hội",
       teacher: "Mr. Barry Huỳnh Chí Viễn",
       image: "/tranlebaonhi-feedback.jpg",
-      content: `Thông qua khoá học này, em hiểu được tâm lý con người thông qua các khái niệm cơ bản về hành vi, cảm xúc, tư duy của con người. Hiểu nguồn gốc Tâm Lý học hành vi từ đâu ra. Kỹ năng giao tiếp cũng như nhận thức được phát triển EQ là một việc rất quan trọng trong mỗi con người.`,
-      highlight: "Điều làm em bất ngờ trong khoá học là độ phức tạp trong tâm lý con người như suy nghĩ và hành động có thể vượt ngoài sự tưởng tượng. Tầm ảnh hưởng đến môi trường nhiều đến mức có thể ảnh hưởng đến tâm lý cá nhân.",
+      content: `Thông qua khóa học này, em hiểu được tâm lý con người thông qua các khái niệm cơ bản về hành vi, cảm xúc, tư duy của con người. Hiểu nguồn gốc Tâm Lý học hành vi từ đâu ra. Kỹ năng giao tiếp cũng như nhận thức được phát triển EQ là một việc rất quan trọng trong mỗi con người.`,
+      highlight: "Điều làm em bất ngờ trong khóa học là độ phức tạp trong tâm lý con người như suy nghĩ và hành động có thể vượt ngoài sự tưởng tượng. Tầm ảnh hưởng đến môi trường nhiều đến mức có thể ảnh hưởng đến tâm lý cá nhân.",
       benefits: [
         "Kỹ năng giải quyết vấn đề và tư duy phản biện",
         "Học và hiểu được suy nghĩ của hai giới",
@@ -145,7 +147,7 @@ export default function TestimonialsSection() {
 
   // Auto-play functionality for desktop feedback cards
   useEffect(() => {
-    if (!isDesktopAutoPlaying || !isVisible) return
+    if (!isDesktopAutoPlaying || !isVisible || isUserHovering) return
 
     const desktopInterval = setInterval(() => {
       setDesktopAutoIndex(prev => {
@@ -155,11 +157,11 @@ export default function TestimonialsSection() {
     }, 5000) // Hiển thị feedback sau mỗi 5 giây
 
     return () => clearInterval(desktopInterval)
-  }, [isDesktopAutoPlaying, isVisible, testimonials.length])
+  }, [isDesktopAutoPlaying, isVisible, testimonials.length, isUserHovering])
 
   // Show desktop feedback automatically
   useEffect(() => {
-    if (isDesktopAutoPlaying && isVisible) {
+    if (isDesktopAutoPlaying && isVisible && !isUserHovering) {
       setHoveredIndex(desktopAutoIndex)
       
       // Hide after 4 seconds, then wait 1 second before showing next
@@ -169,7 +171,7 @@ export default function TestimonialsSection() {
 
       return () => clearTimeout(hideTimeout)
     }
-  }, [desktopAutoIndex, isDesktopAutoPlaying, isVisible])
+  }, [desktopAutoIndex, isDesktopAutoPlaying, isVisible, isUserHovering])
 
   // Pause auto-play when user interacts
   const handleManualNavigation = (newSlide: number) => {
@@ -185,17 +187,34 @@ export default function TestimonialsSection() {
   // Handle desktop hover
   const handleDesktopHover = (index: number) => {
     setHoveredIndex(index)
+    setIsUserHovering(true)
     setIsDesktopAutoPlaying(false)
     
-    // Resume auto-play after 8 seconds of no interaction
-    setTimeout(() => {
-      setIsDesktopAutoPlaying(true)
-    }, 8000)
+    // Clear any existing timeout
+    if (autoPlayTimeoutRef.current) {
+      clearTimeout(autoPlayTimeoutRef.current)
+      autoPlayTimeoutRef.current = null
+    }
   }
 
   const handleDesktopHoverEnd = () => {
     setHoveredIndex(null)
+    setIsUserHovering(false)
+    
+    // Resume auto-play after 3 seconds of no hover interaction
+    autoPlayTimeoutRef.current = setTimeout(() => {
+      setIsDesktopAutoPlaying(true)
+    }, 3000)
   }
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (autoPlayTimeoutRef.current) {
+        clearTimeout(autoPlayTimeoutRef.current)
+      }
+    }
+  }, [])
 
   return (
     <section ref={sectionRef} className="py-12 md:py-16 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">

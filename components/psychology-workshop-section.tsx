@@ -62,13 +62,13 @@ export default function PsychologyWorkshopSection() {
                   <li className="flex items-start">
                     <div className="min-w-0">
                       <p className="font-semibold text-gray-900 text-sm sm:text-base lg:text-base xl:text-lg mb-1 lg:mb-1">Khám phá cách họ suy nghĩ và thao túng</p>
-                      <p className="text-xs sm:text-sm lg:text-sm text-gray-600">Điều gì khiến họ khác người bình thường?</p>
+                      <p className="text-xs sm:text-sm lg:text-sm text-gray-600">Điều gì khiến họ khác biệt với số đông?</p>
                     </div>
                   </li>
                   <li className="flex items-start">
                     <div className="min-w-0">
                       <p className="font-semibold text-gray-900 text-sm sm:text-base lg:text-base xl:text-lg mb-1 lg:mb-1">Chiến lược bảo vệ bản thân</p>
-                      <p className="text-xs sm:text-sm lg:text-sm text-gray-600">Cách giữ vững tâm lý và ranh giới khi buộc phải sống hoặc làm việc cùng người ái kỷ.</p>
+                      <p className="text-xs sm:text-sm lg:text-sm text-gray-600">Cách giữ vững tâm lý và ranh giới khi sống hoặc làm việc cùng người ái kỷ.</p>
                     </div>
                   </li>
                 </ul>
@@ -117,7 +117,7 @@ export default function PsychologyWorkshopSection() {
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-gray-600 font-medium">Phí tham dự</p>
                   <p className="font-semibold text-primary text-lg">199.000đ</p>
-                  <p className="text-sm text-gray-500">(ưu đãi đăng ký trước 20/09)</p>
+                  <p className="text-sm text-gray-500">(Đăng ký sau ngày 20/09 là 299.000đ)</p>
                 </div>
               </div>
 
