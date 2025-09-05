@@ -34,7 +34,7 @@ const data = {
       icon: IconFileDescription,
     },
     {
-      title: "Đăng ký thành viên",
+      title: "Đăng ký thành viên Hội Thảo",
       url: "#members",
       icon: IconUsers,
     },

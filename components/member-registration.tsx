@@ -25,7 +25,7 @@ interface FormErrors {
 }
 
 export default function MemberRegistration({
-    triggerText = "Đăng Ký Thành Viên",
+    triggerText = "Đăng ký thành viên Hội Thảo",
     triggerVariant = "default",
     triggerSize = "default",
     className = ""
@@ -205,7 +205,7 @@ export default function MemberRegistration({
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle>Đăng Ký Thành Viên</DialogTitle>
+                    <DialogTitle>Đăng ký thành viên Hội Thảo</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
