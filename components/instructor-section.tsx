@@ -81,7 +81,7 @@ export default function InstructorSection() {
                 className="rounded-2xl shadow-2xl w-full h-auto object-cover aspect-square"
               />
               <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-[#004976] text-white p-3 md:p-4 rounded-xl shadow-lg">
-                <div className="text-xl md:text-2xl font-bold">10+</div>
+                <div className="text-xl md:text-2xl font-bold">19</div>
                 <div className="text-xs md:text-sm">Năm kinh nghiệm</div>
               </div>
             </div>
