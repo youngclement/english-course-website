@@ -4,7 +4,7 @@ import { TimelineContent } from "@/components/ui/timeline-content"
 import VerticalCutReveal from "@/components/ui/vertical-cut-reveal"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Button } from "@/components/ui/button"
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import CourseRegistrationDialog from "./course-registration-dialog"
 import ConsultationRegistrationDialog from "./consultation-registration-dialog"
 
@@ -38,6 +38,17 @@ const people = [
 export default function HeroSection() {
   const isMobile = useMediaQuery("(max-width: 992px)")
   const heroRef = useRef<HTMLDivElement>(null)
+  const [videoError, setVideoError] = useState(false)
+
+  // Preload video on component mount to improve mobile performance
+  useEffect(() => {
+    if (isMobile) {
+      const link = document.createElement('link')
+      link.rel = 'prefetch'
+      link.href = 'https://www.youtube.com/embed/JrV6o1mrGO8'
+      document.head.appendChild(link)
+    }
+  }, [isMobile])
 
   const revealVariants = {
     visible: (i: number) => ({
@@ -73,13 +84,25 @@ export default function HeroSection() {
     <section className="min-h-screen relative pb-10 bg-cover bg-center bg-no-repeat bg-[#1e3a5f] pt-20" ref={heroRef}>
       {/* Background video with psychology theme */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-        <iframe
-          src="https://www.youtube.com/embed/JrV6o1mrGO8?autoplay=1&mute=1&loop=1&playlist=JrV6o1mrGO8&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1"
-          title="Psychology and Human Behavior Background Video"
-          className="w-full h-full object-cover scale-[2.2] sm:scale-[2.0] md:scale-[1.5] lg:scale-[1.8] xl:scale-[1.6]"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        />
+        {!videoError ? (
+          <iframe
+            src="https://www.youtube.com/embed/JrV6o1mrGO8?autoplay=1&mute=1&loop=1&playlist=JrV6o1mrGO8&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&enablejsapi=1"
+            title="Psychology and Human Behavior Background Video"
+            className="w-full h-full object-cover scale-[2.2] sm:scale-[2.0] md:scale-[1.5] lg:scale-[1.8] xl:scale-[1.6]"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowFullScreen
+            loading="eager"
+            onError={() => setVideoError(true)}
+          />
+        ) : (
+          // Fallback: Static background image if video fails to load
+          <div 
+            className="w-full h-full bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: 'url("https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")'
+            }}
+          />
+        )}
         {/* Video overlay for better text readability - increased opacity on mobile */}
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1e3a5f]/75 via-[#2a4a6b]/65 to-[#1e3a5f]/75 md:from-[#1e3a5f]/60 md:via-[#2a4a6b]/50 md:to-[#1e3a5f]/60"></div>
       </div>

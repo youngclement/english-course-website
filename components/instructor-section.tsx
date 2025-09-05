@@ -175,7 +175,7 @@ export default function InstructorSection() {
             {showInstructorInfo && (
               <div className="space-y-3 md:space-y-4 text-gray-600 leading-relaxed text-sm md:text-base animate-in slide-in-from-top-2 duration-300">
                 <p>
-                  Thầy Huỳnh Chí Viễn (Barry) là chuyên gia tâm lý học hành vi và xã hội với hơn 16 năm kinh nghiệm trong lĩnh vực giảng dạy. Thầy tốt nghiệp ngành sư phạm tiếng Anh, quản lý giáo dục và tâm lý hành vi tại đại học Nicholls State University, bang Louisiana, Hoa Kỳ năm 2006.
+                  Thầy Huỳnh Chí Viễn (Barry) là chuyên gia tâm lý học hành vi và xã hội gần 19 năm kinh nghiệm trong lĩnh vực giảng dạy. Thầy tốt nghiệp ngành sư phạm tiếng Anh, quản lý giáo dục và tâm lý hành vi tại đại học Nicholls State University, bang Louisiana, Hoa Kỳ năm 2006.
                 </p>
 
                 <p>
