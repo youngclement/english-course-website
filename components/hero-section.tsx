@@ -80,8 +80,8 @@ export default function HeroSection() {
           allow="autoplay; encrypted-media"
           allowFullScreen
         />
-        {/* Video overlay for better text readability - reduced opacity */}
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1e3a5f]/60 via-[#2a4a6b]/50 to-[#1e3a5f]/60"></div>
+        {/* Video overlay for better text readability - increased opacity on mobile */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1e3a5f]/75 via-[#2a4a6b]/65 to-[#1e3a5f]/75 md:from-[#1e3a5f]/60 md:via-[#2a4a6b]/50 md:to-[#1e3a5f]/60"></div>
       </div>
 
       {/* Main Content */}
