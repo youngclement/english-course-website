@@ -10,6 +10,9 @@ export default function TestimonialsSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [desktopAutoIndex, setDesktopAutoIndex] = useState(0)
+  const [isDesktopAutoPlaying, setIsDesktopAutoPlaying] = useState(true)
   const sectionRef = useRef<HTMLElement>(null)
 
   const testimonials = [
@@ -38,16 +41,7 @@ export default function TestimonialsSection() {
       highlight: "Thực sự nếu được học lớp của thầy sớm hơn 10 năm, cuộc đời em đã khác đi rất nhiều. Và em tin khi học xong lớp này thì em cũng khác, theo một chiều hướng rất tích cực và tràn đầy năng lượng tốt.",
       rating: 5,
     },
-    {
-      name: "Nguyễn Phương Anh",
-      role: "Học viên khóa học",
-      course: "Tâm Lý Học Hành Vi & Xã Hội",
-      teacher: "Mr. Barry Huỳnh Chí Viễn",
-      image: "https://bhvenglish.vn/wp-content/uploads/2022/03/Nguyen-Phuong-Anh.jpg",
-      content: `Tụi em gặp được thầy khi bản thân 2 đứa đều là những người lớn với đứa trẻ bên trong đầy vết thương, tưởng chừng như có thể đi đến quyết định chấm dứt cuộc hôn nhân này. Nhưng nhờ có thầy, nhờ những bài học và chia sẻ thật tâm từ thầy mà tụi em có thể tự giải quyết những vấn đề của mình.`,
-      highlight: "Điều tuyệt vời nhất khi được học với thầy đó chính là tụi em muốn mình tốt hơn, muốn trở thành người văn minh hơn, có nhiều tri thức hơn.",
-      rating: 5,
-    },
+    
     {
       name: "Nguyễn Hải Bằng",
       role: "Học viên khóa học",
@@ -58,21 +52,63 @@ export default function TestimonialsSection() {
       highlight: "Hy vọng tương lai sẽ có cơ hội học được tất cả lớp ở chỗ thầy. Mong trung tâm ngày càng lớn mạnh để góp phần cải thiện nhận thức của giới trẻ Việt Nam.",
       rating: 5,
     },
+    {
+      name: "Nguyễn Trương Thái Hà",
+      role: "Học viên khóa học",
+      course: "Tâm Lý Học Hành Vi & Xã Hội",
+      teacher: "Mr. Barry Huỳnh Chí Viễn",
+      image: "/nguyentruongthaiha-feedback.jpg",
+      content: `Có nhiều khái niệm em có biết trước đây nhưng ở mức mơ hồ, hoặc bị nhầm lẫn giữa các khái niệm. Nhờ khoá học em đã có thể hiểu rõ hơn, có một kiến thức nền để lý giải, tìm hiểu rộng ra các vấn đề liên quan đến tâm lý và hành vi. Ví dụ: như khái niệm về bản năng, bản ngã, siêu bản ngã.`,
+      highlight: "Càng học em càng cảm thấy em có lối suy nghĩ khá khác với số đông trong xã hội ở Việt Nam. Tuy nhiên, đó lại là những lối tư duy tích cực, tư duy tốt mà em đã tự học, tự tìm hiểu để phát triển bản thân.",
+      benefits: [
+        "Thầy dạy rất nhiệt tình, cung cấp kiến thức rất rõ ràng, dễ hiểu",
+        "Luyện tập lối suy nghĩ, nhìn nhận vấn đề đa chiều hơn",
+        "Hạn chế bị phiến diện, định kiến khi đứng trước vấn đề tranh luận",
+        "Phù hợp với nhiều nhóm đối tượng và độ tuổi khác nhau"
+      ],
+      rating: 5,
+    },
+    {
+      name: "Hoàng Thị Bảo Hiếu",
+      role: "Học viên khóa học",
+      course: "Tâm Lý Học Hành Vi & Xã Hội",
+      teacher: "Mr. Barry Huỳnh Chí Viễn",
+      image: "/hoangthibaohieu-feedback.jpg",
+      content: `Tham gia khóa học Tâm Lý Hành Vi và Xã hội của thầy Viễn đã là một quyết định sáng suốt của em trong năm 2024. Sau khi trải qua một số chuyện không như ý đến với mình, em có nhận thức rằng bản thân cần cập nhật kiến thức, kỹ năng để mình có thể xử lý tốt các vấn đề đến với mình và khóa học đã giúp em làm được.`,
+      highlight: "Suốt bốn tháng học cũng chính là khoảng thời gian bốn tháng mà bản thân em nhìn nhận lại bản thân mình, đối chiếu những kiến thức được học lên bản thân và cuộc sống của mình và dần dần đang có những thay đổi trong tư duy của em. Em tin việc thay đổi trong tư duy là bước đầu dẫn đến những thay đổi tích cực khác trong em và cuộc sống của em.",
+      rating: 5,
+    },
+    {
+      name: "Trần Lê Bảo Nhi",
+      role: "Học viên khóa học",
+      course: "Tâm Lý Học Hành Vi & Xã Hội",
+      teacher: "Mr. Barry Huỳnh Chí Viễn",
+      image: "/tranlebaonhi-feedback.jpg",
+      content: `Thông qua khoá học này, em hiểu được tâm lý con người thông qua các khái niệm cơ bản về hành vi, cảm xúc, tư duy của con người. Hiểu nguồn gốc Tâm Lý học hành vi từ đâu ra. Kỹ năng giao tiếp cũng như nhận thức được phát triển EQ là một việc rất quan trọng trong mỗi con người.`,
+      highlight: "Điều làm em bất ngờ trong khoá học là độ phức tạp trong tâm lý con người như suy nghĩ và hành động có thể vượt ngoài sự tưởng tượng. Tầm ảnh hưởng đến môi trường nhiều đến mức có thể ảnh hưởng đến tâm lý cá nhân.",
+      benefits: [
+        "Kỹ năng giải quyết vấn đề và tư duy phản biện",
+        "Học và hiểu được suy nghĩ của hai giới",
+        "Cách phát triển mối quan hệ bền vững",
+        "Học được cách vượt qua sau mối quan hệ tan vỡ"
+      ],
+      rating: 5,
+    },
   ]
 
-  // Calculate positions along a rainbow curve
+  // Calculate positions along a gentler curve with maximum spacing
   const getCurvePosition = (index: number, total: number) => {
-    // Create a more natural rainbow curve using sine function
+    // Create a gentler curve with much more spacing
     const progress = index / (total - 1) // 0 to 1
     const angle = progress * Math.PI // 0 to π
 
-    // Rainbow curve: y = -height * sin(angle) + offset
+    // Gentler curve with maximum spacing: reduced curve height, increased spread
     const centerX = 0
-    const maxHeight = 80 // Reduced height for mobile
-    const spread = 160 // Reduced spread for mobile
+    const maxHeight = 100 // Reduced height for gentler curve
+    const spread = 400 // Much increased spread for maximum horizontal spacing
 
     const x = centerX + (progress - 0.5) * spread * 2
-    const y = -maxHeight * Math.sin(angle) + 30
+    const y = -maxHeight * Math.sin(angle) + 60 // Gentler curve
 
     return { x, y }
   }
@@ -93,6 +129,73 @@ export default function TestimonialsSection() {
 
     return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+    if (!isAutoPlaying || !isVisible) return
+
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => {
+        const nextSlide = prev + 1
+        return nextSlide >= testimonials.length ? 0 : nextSlide
+      })
+    }, 4000) // Chuyển slide sau mỗi 4 giây
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, isVisible, testimonials.length])
+
+  // Auto-play functionality for desktop feedback cards
+  useEffect(() => {
+    if (!isDesktopAutoPlaying || !isVisible) return
+
+    const desktopInterval = setInterval(() => {
+      setDesktopAutoIndex(prev => {
+        const nextIndex = prev + 1
+        return nextIndex >= testimonials.length ? 0 : nextIndex
+      })
+    }, 5000) // Hiển thị feedback sau mỗi 5 giây
+
+    return () => clearInterval(desktopInterval)
+  }, [isDesktopAutoPlaying, isVisible, testimonials.length])
+
+  // Show desktop feedback automatically
+  useEffect(() => {
+    if (isDesktopAutoPlaying && isVisible) {
+      setHoveredIndex(desktopAutoIndex)
+      
+      // Hide after 4 seconds, then wait 1 second before showing next
+      const hideTimeout = setTimeout(() => {
+        setHoveredIndex(null)
+      }, 4000)
+
+      return () => clearTimeout(hideTimeout)
+    }
+  }, [desktopAutoIndex, isDesktopAutoPlaying, isVisible])
+
+  // Pause auto-play when user interacts
+  const handleManualNavigation = (newSlide: number) => {
+    setCurrentSlide(newSlide)
+    setIsAutoPlaying(false)
+    
+    // Resume auto-play after 10 seconds of no interaction
+    setTimeout(() => {
+      setIsAutoPlaying(true)
+    }, 10000)
+  }
+
+  // Handle desktop hover
+  const handleDesktopHover = (index: number) => {
+    setHoveredIndex(index)
+    setIsDesktopAutoPlaying(false)
+    
+    // Resume auto-play after 8 seconds of no interaction
+    setTimeout(() => {
+      setIsDesktopAutoPlaying(true)
+    }, 8000)
+  }
+
+  const handleDesktopHoverEnd = () => {
+    setHoveredIndex(null)
+  }
 
   return (
     <section ref={sectionRef} className="py-12 md:py-16 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
@@ -118,7 +221,7 @@ export default function TestimonialsSection() {
         </motion.div>
 
         {/* Rainbow Curve Container - Desktop Only */}
-        <div className="hidden lg:block relative h-[500px] lg:h-[600px] flex items-center justify-center">
+        <div className="hidden lg:flex relative h-[900px] lg:h-[1000px] items-center justify-center">
           {/* SVG Curve Path */}
           <svg
             className="absolute inset-0 w-full h-full pointer-events-none"
@@ -126,7 +229,7 @@ export default function TestimonialsSection() {
             preserveAspectRatio="none"
           >
             <path
-              d="M 200 350 Q 400 270 600 350"
+              d="M 100 400 Q 400 320 700 400"
               stroke="url(#rainbowGradient)"
               strokeWidth="3"
               fill="none"
@@ -183,8 +286,8 @@ export default function TestimonialsSection() {
                   scale: 1.1,
                   zIndex: 50
                 }}
-                onHoverStart={() => setHoveredIndex(index)}
-                onHoverEnd={() => setHoveredIndex(null)}
+                onHoverStart={() => handleDesktopHover(index)}
+                onHoverEnd={handleDesktopHoverEnd}
               >
                 {/* Student Image */}
                 <div className="relative">
@@ -254,45 +357,27 @@ export default function TestimonialsSection() {
                               : "w-5 h-5"
                               }`} />
                             <div className="flex-1">
-                              <h4 className={`font-bold text-gray-900 mb-1 ${testimonial.name === "Phạm Hoàng Như Ngọc"
-                                ? "text-xs md:text-sm"
-                                : "text-sm md:text-base"
-                                }`}>
+                              <h4 className="font-bold text-gray-900 mb-1 text-xs md:text-sm">
                                 {testimonial.name}
                               </h4>
-                              <p className={`text-gray-600 mb-1 ${testimonial.name === "Phạm Hoàng Như Ngọc"
-                                ? "text-xs"
-                                : "text-sm"
-                                }`}>
+                              <p className="text-gray-600 mb-1 text-xs">
                                 {testimonial.course}
                               </p>
                             </div>
                           </div>
 
-                          <p className={`text-gray-700 leading-relaxed ${testimonial.name === "Phạm Hoàng Như Ngọc"
-                            ? "text-xs mb-2"
-                            : "text-sm mb-3"
-                            }`}>
+                          <p className="text-gray-700 leading-relaxed text-xs mb-2">
                             {testimonial.content}
                           </p>
 
                           {testimonial.benefits && (
-                            <div className={`bg-primary/5 rounded-lg ${testimonial.name === "Phạm Hoàng Như Ngọc"
-                              ? "p-2 mb-2"
-                              : "p-3 mb-3"
-                              }`}>
-                              <h5 className={`font-semibold text-primary mb-1 ${testimonial.name === "Phạm Hoàng Như Ngọc"
-                                ? "text-xs"
-                                : "text-sm"
-                                }`}>Những điều lợi ích khi học:</h5>
+                            <div className="bg-primary/5 rounded-lg p-2 mb-2">
+                              <h5 className="font-semibold text-primary mb-1 text-xs">Những điều lợi ích khi học:</h5>
                               <ul className="space-y-1">
                                 {testimonial.benefits.map((benefit, idx) => (
                                   <li key={idx} className="flex items-start gap-2">
                                     <span className="text-primary font-bold text-xs flex-shrink-0 mt-0.5">•</span>
-                                    <span className={`leading-relaxed ${testimonial.name === "Phạm Hoàng Như Ngọc"
-                                      ? "text-xs"
-                                      : "text-sm"
-                                      }`}>{benefit}</span>
+                                    <span className="leading-relaxed text-xs">{benefit}</span>
                                   </li>
                                 ))}
                               </ul>
@@ -300,10 +385,7 @@ export default function TestimonialsSection() {
                           )}
 
                           {testimonial.highlight && (
-                            <blockquote className={`border-l-3 border-primary/40 italic text-primary/80 font-medium leading-relaxed ${testimonial.name === "Phạm Hoàng Như Ngọc"
-                              ? "text-xs pl-2 mb-2"
-                              : "text-sm pl-3 mb-3"
-                              }`}>
+                            <blockquote className="border-l-3 border-primary/40 italic text-primary/80 font-medium leading-relaxed text-xs pl-2 mb-2">
                               "{testimonial.highlight}"
                             </blockquote>
                           )}
@@ -311,16 +393,10 @@ export default function TestimonialsSection() {
                           <div className="flex items-center gap-2">
                             <div className="flex gap-1">
                               {[...Array(testimonial.rating)].map((_, i) => (
-                                <Star key={i} className={`text-yellow-400 fill-current ${testimonial.name === "Phạm Hoàng Như Ngọc"
-                                  ? "w-3 h-3"
-                                  : "w-4 h-4"
-                                  }`} />
+                                <Star key={i} className="text-yellow-400 fill-current w-3 h-3" />
                               ))}
                             </div>
-                            <span className={`text-gray-600 ${testimonial.name === "Phạm Hoàng Như Ngọc"
-                              ? "text-xs"
-                              : "text-sm"
-                              }`}>
+                            <span className="text-gray-600 text-xs">
                               {testimonial.rating}/5 sao
                             </span>
                           </div>
@@ -344,6 +420,8 @@ export default function TestimonialsSection() {
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              onMouseEnter={() => setIsAutoPlaying(false)}
+              onMouseLeave={() => setIsAutoPlaying(true)}
             >
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="w-full flex-shrink-0 px-2">
@@ -452,7 +530,7 @@ export default function TestimonialsSection() {
           <div className="flex items-center justify-between mt-3">
             <div className="flex items-center gap-3">
               <button
-                onClick={() => setCurrentSlide(prev => Math.max(0, prev - 1))}
+                onClick={() => handleManualNavigation(Math.max(0, currentSlide - 1))}
                 disabled={currentSlide === 0}
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary hover:bg-primary/90 disabled:bg-gray-300 disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors shadow-lg"
               >
@@ -461,7 +539,7 @@ export default function TestimonialsSection() {
                 </svg>
               </button>
               <button
-                onClick={() => setCurrentSlide(prev => Math.min(testimonials.length - 1, prev + 1))}
+                onClick={() => handleManualNavigation(Math.min(testimonials.length - 1, currentSlide + 1))}
                 disabled={currentSlide === testimonials.length - 1}
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary hover:bg-primary/90 disabled:bg-gray-300 disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors shadow-lg"
               >
@@ -476,9 +554,10 @@ export default function TestimonialsSection() {
               {testimonials.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-colors ${index === currentSlide ? 'bg-primary' : 'bg-gray-300 hover:bg-primary/60'
-                    }`}
+                  onClick={() => handleManualNavigation(index)}
+                  className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-colors ${
+                    index === currentSlide ? 'bg-primary' : 'bg-gray-300 hover:bg-primary/60'
+                  }`}
                 />
               ))}
             </div>

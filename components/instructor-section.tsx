@@ -3,11 +3,12 @@
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useState } from "react"
-import { ChevronDown, ChevronUp, ExternalLink } from "lucide-react"
+import { ChevronDown, ChevronUp, ExternalLink, ZoomIn, X } from "lucide-react"
 
 export default function InstructorSection() {
   const [showMedia, setShowMedia] = useState(false)
   const [showInstructorInfo, setShowInstructorInfo] = useState(true)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   const mediaArticles = [
     {
@@ -56,6 +57,14 @@ export default function InstructorSection() {
     }
   }
 
+  const openImageModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl)
+  }
+
+  const closeImageModal = () => {
+    setSelectedImage(null)
+  }
+
   return (
     <section className="py-12 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,33 +87,78 @@ export default function InstructorSection() {
             </div>
 
             {/* Additional Images Gallery */}
-            <div className="grid grid-cols-3 gap-2 md:gap-3 max-w-sm md:max-w-md mx-auto mt-4">
-              <div className="relative aspect-square">
+            <div className="grid grid-cols-4 gap-2 md:gap-3 max-w-sm md:max-w-md mx-auto mt-4">
+              <div className="relative aspect-square group overflow-hidden rounded-lg">
                 <Image
-                  src="https://bhvenglish.com/wp-content/uploads/2025/04/z6506459737997_a9203c80a60413c51cccf7336bc7a4a6.jpg"
-                  alt="Thầy Viễn trong buổi giảng dạy"
+                  src="/vienbook-tuoitredungdelamgi.jpg"
+                  alt="Sách Tuổi Trẻ Dùng Để Làm Gì - Thầy Huỳnh Chí Viễn"
                   width={120}
                   height={120}
-                  className="rounded-lg object-cover w-full h-full shadow-md"
+                  className="rounded-lg object-cover w-full h-full shadow-md transition-transform duration-300 group-hover:scale-105 cursor-pointer"
                 />
+                <div className="absolute inset-0 transition-all duration-300 rounded-lg flex items-center justify-center">
+                  <button
+                    onClick={() => openImageModal("/vienbook-tuoitredungdelamgi.jpg")}
+                    className="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 shadow-lg"
+                    aria-label="Phóng to hình ảnh"
+                  >
+                    <ZoomIn size={14} />
+                  </button>
+                </div>
               </div>
-              <div className="relative aspect-square">
+              <div className="relative aspect-square group overflow-hidden rounded-lg">
                 <Image
-                  src="https://bhvenglish.com/wp-content/uploads/2025/04/z6502999447030_b6b0b653287b68a4ac5f257e16550ebf.jpg"
-                  alt="Thầy Viễn cùng học viên"
+                  src="/vienbook-thebeatles.jpg"
+                  alt="Sách The Beatles Như Thế Kỷ Một Huyền Thoại - Thầy Huỳnh Chí Viễn"
                   width={120}
                   height={120}
-                  className="rounded-lg object-cover w-full h-full shadow-md"
+                  className="rounded-lg object-cover w-full h-full shadow-md transition-transform duration-300 group-hover:scale-105 cursor-pointer"
                 />
+                <div className="absolute inset-0 transition-all duration-300 rounded-lg flex items-center justify-center">
+                  <button
+                    onClick={() => openImageModal("/vienbook-thebeatles.jpg")}
+                    className="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 shadow-lg"
+                    aria-label="Phóng to hình ảnh"
+                  >
+                    <ZoomIn size={14} />
+                  </button>
+                </div>
               </div>
-              <div className="relative aspect-square">
+              <div className="relative aspect-square group overflow-hidden rounded-lg">
                 <Image
-                  src="https://bhvenglish.com/wp-content/uploads/2025/04/ab1c3f18d48d43ad80892d146d98b821.webp"
-                  alt="Thầy Viễn trong hội thảo"
+                  src="/vienbook-comotnuocmyratkhac.jpg"
+                  alt="Sách Có Một Nước Mỹ Rất Khác - Thầy Huỳnh Chí Viễn"
                   width={120}
                   height={120}
-                  className="rounded-lg object-cover w-full h-full shadow-md"
+                  className="rounded-lg object-cover w-full h-full shadow-md transition-transform duration-300 group-hover:scale-105 cursor-pointer"
                 />
+                <div className="absolute inset-0 transition-all duration-300 rounded-lg flex items-center justify-center">
+                  <button
+                    onClick={() => openImageModal("/vienbook-comotnuocmyratkhac.jpg")}
+                    className="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 shadow-lg"
+                    aria-label="Phóng to hình ảnh"
+                  >
+                    <ZoomIn size={14} />
+                  </button>
+                </div>
+              </div>
+              <div className="relative aspect-square group overflow-hidden rounded-lg">
+                <Image
+                  src="/vienbook-lamchamenolucbinhanchocon.jpg"
+                  alt="Sách Làm Cha Làm Mẹ Nội Lực Bình An Cho Con - Thầy Huỳnh Chí Viễn"
+                  width={120}
+                  height={120}
+                  className="rounded-lg object-cover w-full h-full shadow-md transition-transform duration-300 group-hover:scale-105 cursor-pointer"
+                />
+                <div className="absolute inset-0 transition-all duration-300 rounded-lg flex items-center justify-center">
+                  <button
+                    onClick={() => openImageModal("/vienbook-lamchamenolucbinhanchocon.jpg")}
+                    className="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 shadow-lg"
+                    aria-label="Phóng to hình ảnh"
+                  >
+                    <ZoomIn size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -221,6 +275,32 @@ export default function InstructorSection() {
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
+          onClick={closeImageModal}
+        >
+          <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg">
+            <button
+              onClick={closeImageModal}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors p-2"
+              aria-label="Đóng"
+            >
+              <X size={32} />
+            </button>
+            <Image
+              src={selectedImage}
+              alt="Phóng to hình ảnh"
+              width={600}
+              height={600}
+              className="w-full h-auto object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
     </section>
   )
 }
