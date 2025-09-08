@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { LoginForm } from "@/components/login-form"
 import { AdminSidebar } from "@/components/admin-sidebar"
 import { AdminHeader } from "@/components/admin-header"
+import { IELTSAdmin } from "@/components/ielts-admin"
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import {
@@ -1015,6 +1016,10 @@ export default function AdminDashboard() {
                                     )}
                                 </CardContent>
                             </Card>
+                        )}
+
+                        {currentTab === "ielts" && (
+                            <IELTSAdmin token={token} />
                         )}
                     </div>
                 </div>

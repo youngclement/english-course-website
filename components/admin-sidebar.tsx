@@ -6,6 +6,7 @@ import {
   IconUsers,
   IconFileDescription,
   IconCalendarEvent,
+  IconSchool,
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -42,6 +43,11 @@ const data = {
       title: "Đăng ký tư vấn",
       url: "#consultations",
       icon: IconCalendarEvent,
+    },
+    {
+      title: "IELTS Test Management",
+      url: "#ielts",
+      icon: IconSchool,
     },
     {
       title: "Cài đặt",

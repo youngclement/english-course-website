@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://bhv-be-production.up.railway.app/api";
+const API_BASE_URL = "http://localhost:8080/api";
 
 export interface CourseRegistration {
   full_name: string;
@@ -441,5 +441,386 @@ export const consultationAPI = {
     });
 
     return response.json();
+  },
+};
+
+// IELTS Test Interfaces
+export interface IELTSOption {
+  optionId: string;
+  text: string;
+}
+
+export interface IELTSQuestion {
+  questionNumber: number;
+  questionType: 'multiple-choice' | 'fill-blank' | 'true-false' | 'matching' | 'short-answer' | 'essay' | 'speaking';
+  questionText: string;
+  options?: IELTSOption[];
+  correctAnswer?: string;
+  points: number;
+  audioUrl?: string;
+  imageUrl?: string;
+}
+
+export interface IELTSSection {
+  sectionType: 'listening' | 'reading' | 'writing' | 'speaking';
+  sectionNumber: number;
+  title: string;
+  description?: string;
+  timeLimit: number;
+  questions: IELTSQuestion[];
+}
+
+export interface IELTSTest {
+  _id?: string;
+  title: string;
+  description: string;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  testType: 'full-test' | 'listening-only' | 'reading-only' | 'writing-only' | 'speaking-only';
+  duration: number;
+  questionCount?: number;
+  maxScore?: number;
+  passingScore: number;
+  sections: IELTSSection[];
+  isActive?: boolean;
+  createdBy?: {
+    _id: string;
+    email: string;
+    role: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IELTSTestSubmission {
+  _id?: string;
+  testId: string | {
+    _id: string;
+    title: string;
+    level: string;
+    testType: string;
+  };
+  userId: string | {
+    _id: string;
+    email: string;
+    role: string;
+  };
+  test?: {
+    _id: string;
+    title: string;
+    level: string;
+    passingScore: number;
+  };
+  answers: Array<{
+    questionNumber: number;
+    sectionType: string;
+    answer: string;
+    timeSpent: number;
+  }>;
+  startTime: string;
+  endTime?: string;
+  totalTimeSpent?: number;
+  overallScore?: number;
+  maxOverallScore?: number;
+  overallPercentage?: number;
+  overallBandScore?: number;
+  sectionResults?: Array<{
+    sectionType: string;
+    score: number;
+    maxScore: number;
+    percentage: number;
+    bandScore: number;
+    correctAnswers: number;
+    totalQuestions: number;
+  }>;
+  status: 'in-progress' | 'completed' | 'abandoned';
+  attemptNumber: number;
+  isPassed?: boolean;
+  analysis?: {
+    strengths: string[];
+    weaknesses: string[];
+    recommendations: string[];
+  };
+}
+
+export interface IELTSTestsResponse {
+  tests: IELTSTest[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+  };
+}
+
+export interface IELTSSubmissionsResponse {
+  submissions: IELTSTestSubmission[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+  };
+}
+
+export interface IELTSStatistics {
+  overview: {
+    totalTests: number;
+    totalSubmissions: number;
+    completedSubmissions: number;
+    inProgressSubmissions: number;
+  };
+  avgScoresByLevel: Array<{
+    _id: string;
+    averageScore: number;
+    count: number;
+  }>;
+  popularTests: Array<{
+    testId: string;
+    title: string;
+    submissionCount: number;
+    averageScore: number;
+  }>;
+}
+
+// IELTS API
+export const ieltsAPI = {
+  // Student APIs
+  getTests: async (
+    token: string,
+    params: {
+      page?: number;
+      limit?: number;
+      level?: string;
+      testType?: string;
+      isActive?: boolean;
+    } = {}
+  ): Promise<ApiResponse<IELTSTestsResponse>> => {
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        queryParams.append(key, value.toString());
+      }
+    });
+    
+    const response = await fetch(`${API_BASE_URL}/ielts/tests?${queryParams}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  },
+
+  getTestDetails: async (
+    token: string,
+    testId: string
+  ): Promise<ApiResponse<{ test: IELTSTest; hasOngoingSubmission: boolean; ongoingSubmissionId: string | null }>> => {
+    const response = await fetch(`${API_BASE_URL}/ielts/tests/${testId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  },
+
+  startTest: async (
+    token: string,
+    testId: string
+  ): Promise<ApiResponse<{ submissionId: string; startTime: string; attemptNumber: number }>> => {
+    const response = await fetch(`${API_BASE_URL}/ielts/tests/${testId}/start`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  },
+
+  saveAnswer: async (
+    token: string,
+    submissionId: string,
+    answer: {
+      questionNumber: number;
+      sectionType: string;
+      answer: string;
+      timeSpent: number;
+    }
+  ): Promise<ApiResponse<{ questionNumber: number; sectionType: string; savedAt: string }>> => {
+    const response = await fetch(`${API_BASE_URL}/ielts/submissions/${submissionId}/answers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(answer),
+    });
+    return response.json();
+  },
+
+  submitTest: async (
+    token: string,
+    submissionId: string
+  ): Promise<ApiResponse<IELTSTestSubmission>> => {
+    const response = await fetch(`${API_BASE_URL}/ielts/submissions/${submissionId}/submit`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  },
+
+  getSubmissionResults: async (
+    token: string,
+    submissionId: string
+  ): Promise<ApiResponse<{ submission: IELTSTestSubmission; analysis: any; isPassed: boolean }>> => {
+    const response = await fetch(`${API_BASE_URL}/ielts/submissions/${submissionId}/results`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  },
+
+  getTestHistory: async (
+    token: string,
+    params: {
+      page?: number;
+      limit?: number;
+      testId?: string;
+    } = {}
+  ): Promise<ApiResponse<IELTSSubmissionsResponse>> => {
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        queryParams.append(key, value.toString());
+      }
+    });
+    
+    const response = await fetch(`${API_BASE_URL}/ielts/history?${queryParams}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  },
+
+  // Admin APIs
+  admin: {
+    getTests: async (
+      token: string,
+      params: {
+        page?: number;
+        limit?: number;
+        level?: string;
+        testType?: string;
+        isActive?: boolean;
+      } = {}
+    ): Promise<ApiResponse<IELTSTestsResponse>> => {
+      const queryParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined) {
+          queryParams.append(key, value.toString());
+        }
+      });
+      
+      const response = await fetch(`${API_BASE_URL}/ielts/tests?${queryParams}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
+    },
+
+    createTest: async (
+      token: string,
+      test: Omit<IELTSTest, '_id' | 'createdBy' | 'createdAt' | 'updatedAt'>
+    ): Promise<ApiResponse<IELTSTest>> => {
+      const response = await fetch(`${API_BASE_URL}/ielts/admin/tests`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(test),
+      });
+      return response.json();
+    },
+
+    updateTest: async (
+      token: string,
+      testId: string,
+      test: Partial<IELTSTest>
+    ): Promise<ApiResponse<IELTSTest>> => {
+      const response = await fetch(`${API_BASE_URL}/ielts/admin/tests/${testId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(test),
+      });
+      return response.json();
+    },
+
+    deleteTest: async (
+      token: string,
+      testId: string
+    ): Promise<ApiResponse<void>> => {
+      const response = await fetch(`${API_BASE_URL}/ielts/admin/tests/${testId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
+    },
+
+    getTestDetails: async (
+      token: string,
+      testId: string
+    ): Promise<ApiResponse<{ test: IELTSTest; hasOngoingSubmission: boolean; ongoingSubmissionId: string | null }>> => {
+      const response = await fetch(`${API_BASE_URL}/ielts/tests/${testId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
+    },
+
+    getAllSubmissions: async (
+      token: string,
+      params: {
+        page?: number;
+        limit?: number;
+        testId?: string;
+        userId?: string;
+        status?: string;
+      } = {}
+    ): Promise<ApiResponse<IELTSSubmissionsResponse>> => {
+      const queryParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined) {
+          queryParams.append(key, value.toString());
+        }
+      });
+      
+      const response = await fetch(`${API_BASE_URL}/ielts/admin/submissions?${queryParams}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
+    },
+
+    getStatistics: async (
+      token: string
+    ): Promise<ApiResponse<IELTSStatistics>> => {
+      const response = await fetch(`${API_BASE_URL}/ielts/admin/statistics`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
+    },
   },
 };

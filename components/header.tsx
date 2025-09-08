@@ -97,6 +97,13 @@ export default function Header() {
                   buttonSize="default"
                   className="rounded-full px-6 py-3 text-sm font-semibold border-[#074165] text-[#074165] hover:bg-[#074165] hover:text-white"
                 />
+
+                <a 
+                  href="/ielts"
+                  className="rounded-full px-6 py-3 text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                >
+                  IELTS Tests
+                </a>
               </div>
 
               <div className="flex items-center gap-3">
