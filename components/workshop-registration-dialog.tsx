@@ -402,7 +402,7 @@ export default function WorkshopRegistrationDialog({
                   </div>
                   <div className="flex justify-between">
                     <span className="font-medium text-xs">Nội dung:</span>
-                    <span className="text-xs">Họ và tên Hội thảo tâm lý học</span>
+                    <span className="text-xs">Họ tên người tham dự + số điện thoại</span>
                   </div>
                 </div>
               </div>
