@@ -128,8 +128,8 @@ export default function PsychologyWorkshopDialog({ open, onOpenChange }: Psychol
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm text-gray-600 font-medium">Phí tham dự</p>
-                    <p className="font-semibold text-primary text-base">199.000đ</p>
-                    <p className="text-xs text-gray-500">(Đăng ký sau ngày 20/09 là 299.000đ)</p>
+                    <p className="font-semibold text-primary text-base">299.000đ</p>
+                    <p className="text-xs text-gray-500">(Đăng ký sau ngày 30/09 là 599.000đ)</p>
                   </div>
                 </div>
 

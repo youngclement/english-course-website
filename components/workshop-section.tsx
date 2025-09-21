@@ -118,7 +118,7 @@ export default function WorkshopSection() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Giá vé</p>
-                      <p className="font-semibold text-primary">199,000 VND</p>
+                      <p className="font-semibold text-primary">299,000 VND</p>
                     </div>
                   </div>
                 </div>
@@ -171,7 +171,7 @@ export default function WorkshopSection() {
               <CardContent className="p-6">
                 <div className="text-center space-y-4">
                   <div>
-                    <p className="text-2xl font-bold text-primary">199,000 VND</p>
+                    <p className="text-2xl font-bold text-primary">299,000 VND</p>
                     <p className="text-sm text-muted-foreground">
                       <span className="line-through">Giá gốc: 299,000 VND</span>
                       <Badge variant="destructive" className="ml-2">-33%</Badge>
