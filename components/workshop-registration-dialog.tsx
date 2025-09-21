@@ -64,7 +64,7 @@ export default function WorkshopRegistrationDialog({
     date: "15/12/2025",
     time: "19:00 - 21:00",
     venue: "Online via Zoom",
-    price: "199,000 VND",
+    price: "299,000 VND",
     speaker: "Thầy Huỳnh Chí Viễn",
     topics: [
       "Hiểu đúng về cảm xúc và hành vi",
@@ -250,7 +250,7 @@ export default function WorkshopRegistrationDialog({
                   </div>
                   <div>
                     <Label className="font-semibold text-xs">Giá vé:</Label>
-                    <Badge variant="default" className="text-sm">199.000đ</Badge>
+                    <Badge variant="default" className="text-sm">299.000đ</Badge>
                   </div>
                 </div>
                 
@@ -398,7 +398,7 @@ export default function WorkshopRegistrationDialog({
                   </div>
                   <div className="flex justify-between">
                     <span className="font-medium text-xs">Số tiền:</span>
-                    <span className="text-sm font-bold text-primary">199.000đ</span>
+                    <span className="text-sm font-bold text-primary">299.000đ</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="font-medium text-xs">Nội dung:</span>
